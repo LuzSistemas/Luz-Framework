@@ -1,0 +1,293 @@
+.ckbox, .rdio {
+  position: relative;
+}
+
+.ckbox input[type="checkbox"], .rdio input[type="radio"] {
+  opacity: 0;
+}
+
+.ckbox label, .rdio label {
+  padding-left: 10px;
+  cursor: pointer;
+  margin-bottom: 7px !important;
+}
+
+.ckbox label:before {
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 1px;
+  left: 0;
+  content: '';
+  display: inline-block;
+  .borde-radius(2px);
+  border: 1px solid #bbbbbb;
+  background: @white-color;
+}
+
+.ckbox input[type="checkbox"] :disabled + label {
+  color: #999999;
+}
+
+.ckbox input[type="checkbox"] :disabled + label:before {
+  background-color: #eeeeee;
+}
+
+.ckbox input[type="checkbox"] :checked + label::after {
+  font-family: 'FontAwesome';
+  content: "\F00C";
+  position: absolute;
+  top: 0;
+  left: 3.5px;
+  display: inline-block;
+  font-size: 11px;
+  width: 16px;
+  height: 16px;
+  color:@white-color;
+}
+
+.ckbox-default input[type="checkbox"] :checked + label:before {
+  border-color: #999999;
+}
+
+.ckbox-default input[type="checkbox"] :checked + label::after {
+  color:#333333;
+}
+
+.ckbox-primary input[type="checkbox"] :checked + label:before {
+  border-color:@primary-color;
+  background-color: @primary-color-hover;
+}
+
+.ckbox-warning input[type="checkbox"] :checked + label:before {
+  border-color: @warning-color;
+  background-color: @warning-color-hover;
+}
+
+.ckbox-success input[type="checkbox"] :checked + label:before {
+  border-color: @success-color;
+  background-color: @success-color;
+}
+
+.ckbox-danger input[type="checkbox"] :checked + label:before {
+  border-color: @danger-color;
+  background-color: @danger-color-hover;
+}
+
+.rdio label:before {
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: 1px;
+  left: 0;
+  content: '';
+  display: inline-block;
+  .border-radius(50px);
+  border: 1px solid #bbbbbb;
+  background: @white-color;
+}
+
+.rdio input[type="radio"] :disabled + label {
+  color: #999999;
+}
+
+.rdio input[type="radio"] :disabled + label:before {
+  background-color: #eeeeee;
+}
+
+.rdio input[type="radio"] :checked + label::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  display: inline-block;
+  font-size: 11px;
+  width: 10px;
+  height: 10px;
+  background-color: #444444;
+  .border-radius(50px);
+}
+
+.rdio-default input[type="radio"] :checked + label:before {
+  border-color: #999999;
+}
+
+.rdio-primary input[type="radio"] :checked + label:before {
+  border-color: #428bca;
+}
+
+.rdio-primary input[type="radio"] :checked + label::after {
+  background-color: @primary-color;
+}
+
+.rdio-warning input[type="radio"] :checked + label:before {
+  border-color: @warning-color;
+}
+
+.rdio-warning input[type="radio"] :checked + label::after {
+  background-color: @warning-color;
+}
+
+.rdio-success input[type="radio"] :checked + label:before {
+  border-color: @success-color;
+}
+
+.rdio-success input[type="radio"] :checked + label::after {
+  background-color: @success-color;
+}
+
+.rdio-danger input[type="radio"] :checked + label:before {
+  border-color: @danger-color;
+}
+
+.rdio-danger input[type="radio"] :checked + label::after {
+  background-color: @danger-color;
+}
+
+pre {
+  font-size: 12px;
+  color: #c7254e;
+  border: 1px solid #dddddd;
+  padding: 8px;
+  .border-radius(2px);
+  background: @white-color;
+}
+
+label.error {
+  color: @danger-color;
+  margin-top: 2px;
+}
+
+label.error:empty {
+  display: none !important;
+}
+
+.asterisk {
+  color: @danger-color;
+}
+
+div.error {
+  margin-bottom: 20px;
+  display: none;
+  position: relative;
+  label.error {
+    display: block;
+    padding-left: 25px;
+    position: relative;
+  }
+  label.error:before {
+    font-family: 'Glyphicons Halflings';
+    content: '\e101';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    font-size: 16px;
+    color: @danger-color;
+    display: inline-block;
+  }
+}
+
+.bootstrap-timepicker .dropdown-menu {
+  top: 40px;
+}
+
+.editable {
+  padding: 10px;
+  border: 1px solid #fcfcfc;
+  margin-bottom: 20px;
+  h4 {
+    color: #333333;
+  }
+}
+
+.editable:hover {
+  border: 1px solid #cccccc;
+}
+
+
+// Wizard
+
+.basic-wizard .nav li a {
+  background: @sub-bg-color;
+  border-bottom: 1px solid #cccccc;
+  color: #4a535e;
+  border-right: 1px solid #cccccc;
+  .border-radius(0);
+  opacity: 0.75;
+}
+
+.basic-wizard .nav li a:hover {
+  background-color: #f7f7f7;
+  opacity: 1;
+}
+
+.basic-wizard .nav li:last-child a {
+  border-right: 0;
+}
+
+.basic-wizard .nav li.active {
+  a, a:focus, a:active {
+    background: #fcfcfc;
+    border-bottom-color: #fcfcfc;
+    color: #333333;
+    opacity :1;
+  }
+}
+
+.basic-wizard ul li a span {
+  font-family: @font-family-bold;
+}
+
+.basic-wizard .pager {
+  margin: 0;
+  border-top: 1px solid #dddddd;
+  background: #f7f7f7;
+  padding: 10px;
+  li a {
+    .border-radius(2px);
+    border-color: #357ebd;
+    background-color: #428bca;
+    color: @white-color;
+  }
+  li a:hover {
+    background-color: #3276b1;
+    border-color: #285e8e;
+  }
+  li.disabled a {
+    background: #eeeeee;
+    color: #999999;
+    border-color: #cccccc;
+  }
+}
+
+.basic-wizard .progress {
+  height: 12px;
+  .border-radius(2px);
+}
+.basic-wizard .nav-disabled-click li {
+  a:hover, a:active, a:focus {
+    background-color: #e4e7ea;
+    opacity: 0.75;
+    color: #4a535e;
+    cursor: default;
+  }
+}
+.basic-wizard .nav-disabled-click li.active {
+  a:hover, a:active, a:focus {
+    background: #fcfcfc;
+    color: #333333;
+    opacity: 1;
+  }
+}
+
+.basic-wizard .tab-content {
+  .noshadow;
+  .border-radius(0);
+}
+
+.tab-pane::after {
+  clear: both;
+  display: block;
+  content: '';
+}
+

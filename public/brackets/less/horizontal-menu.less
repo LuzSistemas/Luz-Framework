@@ -1,0 +1,72 @@
+.horizontal-menu {
+  margin: 0;
+  .menutoggle {
+    display: none;
+  }
+  .leftpanel {
+    display: none;
+  }
+  .mainpanel {
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+  }
+}
+.horizontal-menu.chat-view .mainpanel {
+  margin-left: -240px;
+}
+.horizontal-menu.chat-view .navhor-bracket {
+  padding: 0;
+}
+.headerbar .logopanel {
+  float: left;
+  width: 240px;
+  border-right: 1px solid #eeeeee;
+}
+.headerbar .topnav {
+  float: left;
+  margin: 0;
+  > ul {
+    padding: 0;
+    margin: 0;
+    float: left;
+    > li > a:hover, > li > a:focus, > li.open > a, > li.active > a {
+      .box-shadow(0 3px 0 @success-color);
+      color: @success-color;
+      background: none;
+    }
+    > li {
+      margin: 0;
+      float: left;
+      > a {
+        padding: 15px 15px 12px 15px;
+        .border-radius(0);
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #666666;
+        font-family: @font-family-bold;
+        i {
+          margin-right: 5px;
+        }
+        .badge {
+          margin-left: 10px;
+        }
+      }
+      .dropdown-menu {
+        margin-top: 2px;
+        .border-radius(0 0 3px 3px);
+        > li > a {
+          padding: 6px 10px;
+          font-size: 13px;
+        }
+        > li > a:hover {
+          background: @success-color;
+          color: @white-color;
+        }
+        i {
+          display: none;
+        }
+      }
+    }
+  }
+}

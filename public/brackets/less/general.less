@@ -1,0 +1,79 @@
+
+body {
+  background: @main-bg-color;
+  font-family: @font-family;
+  line-height: 21px;
+  color: @main-text-color;
+  overflow: hidden;
+}
+
+body.notfound, body.signin {
+  background: @sub-bg-color;
+}
+
+input, select, textarea {
+  font-family: @font-family;
+  color: @main-text-color;
+}
+
+a:focus, a:active {
+  outline:none;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: @font-family;
+}
+
+strong {
+  font-family: @font-family-bold;
+  font-weight: normal;
+}
+
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: @sub-bg-color;
+  z-index: 10000;
+}
+
+#status {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  font-size: 32px;
+}
+
+
+// Mixins
+
+
+.transition() {
+  -moz-transition: all 0.2s ease-out 0s;
+  -webkit-transition: all 0.2s ease-out 0s;
+  transition: all 0.2s ease-out 0s;
+}
+
+.border-radius(@radius: 3px) {
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.noshadow() {
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.box-shadow(@style, @c) {
+  -moz-box-shadow:    @style @c;
+  -webkit-box-shadow: @style @c;
+  box-shadow:         @style @c;
+}
+

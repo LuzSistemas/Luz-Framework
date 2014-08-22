@@ -1,0 +1,103 @@
+.btn-compose-email {
+  padding: 10px 0;
+  margin-bottom: 20px;
+}
+
+.nav-email > li > a {
+  color: #444444;
+  > .badge {
+    margin-top: 2px;
+  }
+  > i {
+    width: 16px;
+    text-align: center;
+    margin-right: 10px;
+  }
+}
+
+.nav-email > li > a:hover {
+  background-color: #d8dcdf;
+}
+
+.table-email {
+  .noshadow;
+  border-bottom: 1px solid #eeeeee;
+  margin: 0;
+  background-color: #f7f7f7;
+  tr.unread td {
+    background-color: @white-color;
+  }
+  tbody > tr > td {
+    vertical-align: middle;
+  }
+  tr:hover {
+    background-color: #eeeeee;
+    cursor: pointer;
+  }
+  tr.selected td {
+    background-color: #eeeeee;
+  }
+  .ckbox {
+    width: 18px;
+    height: 19px;
+    input[type="checkbox"] :checked + label:after {
+      top: 2px;
+    }
+  }
+  .star {
+    color: #cccccc;
+  }
+  .star-checked {
+    color: #f0ad4e;
+  }
+  td:first-child {
+    width: 30px;
+  }
+  td:nth-child(2) {
+    width: 30px;
+  }
+  .media {
+    margin: 0;
+    padding: 0;
+    h4 {
+      margin: 0;
+      font-size: 14px;
+      line-height: normal;
+      font-family: @font-family-bold;
+    }
+  }
+  .media-object {
+    width: 35px;
+  }
+  .media-meta {
+    font-size: 11px;
+    color: #999999;
+  }
+  .email-summary {
+    margin: 2px 0 0 0;
+    strong {
+      color: #333333;
+    }
+  }
+}
+
+.read-panel {
+  margin-top: 10px;
+  border-top: 1px solid #eeeeee;
+  padding-top: 20px;
+  .media-object {
+    width: 35px;
+  }
+  .media h4 {
+    margin: 2px 0 0 0;
+    font-size: 14px;
+    line-height: normal;
+  }
+  .media-meta {
+    font-size: 12px;
+  }
+}
+
+.email-subject {
+  color: #333333;
+}

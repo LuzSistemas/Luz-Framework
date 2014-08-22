@@ -1,0 +1,113 @@
+// LEFT PANEL COLLAPSE
+
+.leftpanel-collapsed .logopanel {
+  display: none;
+}
+
+.leftpanel-collapsed .headerbar {
+  margin-left: -50px;
+}
+
+.leftpanel-collapsed .leftpanel {
+  width: 50px;
+  top: 50px;
+}
+
+.leftpanel-collapsed .leftpanelinner {
+  padding: 0;
+  .sidebartitle {
+    display: none;
+  }
+}
+
+.leftpanel-collapsed .nav-bracket {
+  margin: 5px;
+  li a {
+    text-align: center;
+    .border-radius(2px);
+    padding: 10px;
+    position: relative;
+    i {
+      margin-right: 0;
+    }
+  }
+  > li > a:hover {
+    .border-radius(2px 0 0 2px);
+  }
+  > li > a > span:last-child {
+    position: absolute;
+    background: #ffffff;
+    padding: 10px 10px 10px 5px;
+    left: 40px;
+    top: 0;
+    min-width: 209px;
+    text-align: left;
+    z-index: 100;
+    display: none;
+    .box-shadow(0 3px 0,rgba(12,12,12,0.03));
+    .border-radius(0 2px 2px 0);
+  }
+  > li > a .badge {
+    display: none;
+  }
+  > li.nav-parent > a {
+    background-image: none;
+  }
+  > li.active > a > span:last-child {
+    .border-radius(0 2px 0 0);
+  }
+  ul {
+    display: none;
+    a {
+      text-align: left;
+      padding: 6px 10px;
+      padding-left: 0;
+    }
+    a:hover {
+      background: none;
+    }
+  }
+  > li.nav-hover > a {
+    background: #ffffff;
+    color: @main-bg-color;
+    > span:last-child {
+      display: block;
+    }
+  }
+  > li.nav-hover.active > a {
+    background: @success-color;
+    color: #ffffff;
+    > span:last-child {
+      background: @success-color;
+      color: #ffffff;
+    }
+  }
+  li.nav-hover ul {
+    display: block;
+    position: absolute;
+    top: 41px;
+    left: 45px;
+    margin: 0;
+    min-width: 204px;
+    background: @main-bg-color;
+    z-index: 100;
+    .border-radius(0 0 2px 0);
+  }
+  .children {
+    display: none;
+  }
+}
+
+.leftpanel-collapsed .mainpanel {
+  margin-left: 50px;
+}
+
+.leftpanel-collapsed .infosummary {
+  display: none;
+}
+
+.leftpanel-collapsed .sticky-leftpanel {
+  overflow-y: visible;
+}
+
+
