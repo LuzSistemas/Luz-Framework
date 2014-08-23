@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <script src="/javascripts/angular.min.js"></script>
-    <script src="/javascripts/BigAngular.js"></script>
-    <script src="/javascripts/indexAngular.js"></script>
-    <link rel="shortcut icon" href="/brackets/images/favicon.png" type="image/png">
-
-    <title>{{page.title}}</title>
+    <script src="/javascripts/angular/angular.min.js"></script>
+    <script>
+        window.BigJS = angular.module('BigJS',[]);
+        window.currentPage = JSON.parse('<%- JSON.stringify(currentPage) %>');
+    </script>
+    <script src="/javascripts/angular/controllers/MasterController.js"></script>
+    <title><%= currentPage.pageTitle %></title>
 
     <link href="/brackets/css/style.default.css" rel="stylesheet">
     <link href="/brackets/css/jquery.datatables.css" rel="stylesheet">
@@ -22,7 +23,7 @@
     <![endif]-->
 </head>
 
-<body>
+<body ng-controller="MasterController">
 
 <!-- Preloader -->
 <div id="preloader">
@@ -34,10 +35,10 @@
 <div class="leftpanel">
 
     <div class="logopanel">
-        <h1><span>[</span> bracket <span>]</span></h1>
+        <h1><span>[</span> BigJS <span>]</span></h1>
     </div>
     <!-- logopanel -->
-    <%- include menuLateral.ejs %>
+    <%- include partials/leftMenu.ejs %>
 </div>
 <!-- leftpanel -->
 
@@ -248,19 +249,7 @@
 
 </div>
 <!-- headerbar -->
-
-<div class="pageheader">
-    <h2><i class="fa fa-home"></i> {{page.title +"_"+ page.xpto}} <span>Subtitle goes here...</span></h2>
-
-    <div class="breadcrumb-wrapper">
-        <span class="label">You are here:</span>
-        <ol class="breadcrumb">
-            <li><a href="/brackets/index.html">Bracket</a></li>
-            <li class="active">{{page.title}}</li>
-        </ol>
-    </div>
-</div>
-
+<%- include partials/pageHeader.ejs %>
 <div class="contentpanel">
     <%- body %>
 </div>
@@ -630,6 +619,5 @@
 
 <script src="/brackets/js/custom.js"></script>
 <script src="/brackets/js/dashboard.js"></script>
-
 </body>
 </html>

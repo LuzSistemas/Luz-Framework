@@ -1,17 +1,19 @@
-var express = require('express');
-var router = express.Router();
-
 /* GET users listing. */
-router.get('/', function(req, res) {
+var novaPessoaController = function(req, res) {
     var entidadesBig = require('../../entidadesBig');
-    entidadesBig.Pessoa.find({}, function (err, pessoas){
+    entidadesBig.Pessoa.find({}, function (err, pessoas)
+    {
         res.render('index', {teste: pessoas});
     });
-});
+};
 
 module.exports =
 {
-    controller: router,
+    controller: novaPessoaController,
+    pageTitle: 'Nova pessoa',
+    pageHeaderTitle: 'Criar nova pessoa',
+    pageHeaderDescription: 'Tela para criação de novas pessoas',
+    pageHeaderIcon: 'fa-user',
     menuItem: {
         title: 'Nova',
         icon: 'fa-plus'

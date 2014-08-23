@@ -1,9 +1,5 @@
-var express = require('express');
-var router = express.Router();
-
-
 /* GET home page. */
-router.get('/', function (req, res) {
+var indexController = function (req, res) {
 
     //    res.render("layout", {});
     //    return;
@@ -15,19 +11,19 @@ router.get('/', function (req, res) {
     //        });
     //    });
     debugger;
-    var novaPessoa = new entidadesBig.Pessoa(req.query);
+    var novaPessoa = new entidadesBig.Usuario(req.query);
     novaPessoa.save(function (err) {
         debugger;
-        if (err) return handleError(err);
+        if (err) return console.log(err);
         // saved!
-        entidadesBig.Pessoa.find({}, function (err, pessoas) {
+        entidadesBig.Usuario.find({}, function (err, pessoas) {
             res.render('index', {teste: pessoas});
-        })
+        });
     });
-});
+};
 
 module.exports = {
-    controller: router,
+    controller: indexController,
     menuItem:{
         title: "Testes Logos",
         icon:"fa-cogs"
