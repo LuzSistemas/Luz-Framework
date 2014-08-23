@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="BigJS">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="/javascripts/angular/angular.min.js"></script>
+    <title><%= currentPage.pageTitle %></title>
+    <script>
+        window.BigJS = angular.module('BigJS',[]);
+        window.currentPage = JSON.parse('<%- JSON.stringify(currentPage) %>');
+    </script>
+    <link href="/brackets/css/style.default.css" rel="stylesheet">
+    <script src="/javascripts/angular/controllers/MasterController.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/brackets/js/html5shiv.js"></script>
+    <script src="/brackets/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body class="signin" ng-controller="MasterController">
+
+<!-- Preloader -->
+<div id="preloader">
+    <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+
+<section>
+
+    <div class="signinpanel">
+
+        <div class="row">
+
+            <div class="col-md-7">
+
+                <div class="signin-info">
+                    <div class="logopanel">
+                        <h1><span>[</span> {{currentPage.systemTitle}} <span>]</span></h1>
+                    </div><!-- logopanel -->
+
+                    <div class="mb20"></div>
+
+                    <h5><strong>{{currentPage.welcomeText}}</strong></h5>
+                    <ul>
+                        <li ng-repeat="t in currentPage.topics"><i class="fa {{t.icon}} mr5"></i> {{t.text}}</li>
+                    </ul>
+                    <div class="mb20"></div>
+                    <strong ng-if="currentPage.allowSignup">Não tem cadastro? <a href="/signup.html">Cadastrar-se</a></strong>
+                </div><!-- signin0-info -->
+
+            </div><!-- col-sm-7 -->
+
+            <div class="col-md-5">
+
+                <form id="frmLogin" name="frmLogin" method="post" action="/login">
+                    <h4 class="nomargin">{{currentPage.loginTitle}}</h4>
+                    <p class="mt5 mb20">Login to access your account.</p>
+
+                    <input type="text" class="form-control uname" placeholder="Username" />
+                    <input type="password" class="form-control pword" placeholder="Password" />
+                    <a href=""><small>Forgot Your Password?</small></a>
+                    <button onclick="$('#frmLogin').submit();" class="btn btn-success btn-block">{{currentPage.loginTitle}}</button>
+
+                </form>
+            </div><!-- col-sm-5 -->
+
+        </div><!-- row -->
+
+        <div class="signup-footer">
+            <div class="pull-left" ng-if="currentPage.leftFooter && currentPage.leftFooter.text">
+                {{currentPage.leftFooter.text}}
+            </div>
+            <div class="pull-right" ng-if="currentPage.rightFooter && currentPage.rightFooter.text">
+                {{currentPage.rightFooter.text}} <a ng-if="currentPage.rightFooter.link" href="{{currentPage.rightFooter.link.url}}" get="_blank">{{currentPage.rightFooter.link.text}}</a>
+            </div>
+        </div>
+    </div><!-- signin -->
+
+</section>
+
+
+<script src="/brackets/js/jquery-1.10.2.min.js"></script>
+<script src="/brackets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="/brackets/js/bootstrap.min.js"></script>
+<script src="/brackets/js/modernizr.min.js"></script>
+<script src="/brackets/js/retina.min.js"></script>
+<script src="/brackets/js/custom.js"></script>
+</body>
+</html>

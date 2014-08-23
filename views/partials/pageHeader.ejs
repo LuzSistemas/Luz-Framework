@@ -1,0 +1,14 @@
+<div class="pageheader">
+    <h2><i class="fa {{currentPage.pageHeaderIcon}}"></i> {{currentPage.pageHeaderTitle}}
+        <span><%= currentPage.pageHeaderDescription %></span></h2>
+
+    <div class="breadcrumb-wrapper">Você está aqui:</span>
+        <ol class="breadcrumb">
+            <li class="{{b.active ? 'active' : ''}}" ng-repeat="b in currentPage.breadCrumb" ng-switch on="b.url">
+                <a ng-switch-when="b.url" href="{{b.url}}">{{b.title}}</a>
+                <a ng-switch-default>{{b.title}}</a>
+            </li>
+        </ol>
+    </div>
+</div>
+<script src="/javascripts/angular/controllers/PageHeaderController.js"></script>
