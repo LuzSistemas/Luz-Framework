@@ -10,62 +10,23 @@ var session = require('express-session');
 var _ = require('lodash-node')
 var entidadesBig = require('./entidadesBig');
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var pwd = require('pwd');
 var commonStrings = require('./commonStrings');
 var luzUtil = require('./LuzUtil');
-
-passport.serializeUser(function (user, done) {
-
-    done(null, user);
-});
-
-passport.deserializeUser(function (user, done) {
-
-    done(null, user);
-});
+var luzAuth = require('./LuzAuth');
 
 /**
- * Defining Passport Local (username and password) logic.
+ * Setup authentication using Passport.
  */
-passport.use(new LocalStrategy(
-    function (username, password, done) {
-        /**
-         * Make it async!
-         */
-        process.nextTick(function () {
-            /**
-             * Gets the user object by the username provided.
-             */
-            entidadesBig.Usuario.getByUsername(username, function (err, user) {
-                /**
-                 * Return query errors.
-                 */
-                if (err) {
-                    return done(err);
-                }
-                /**
-                 * User not found!
-                 */
-                if (!user) {
-                    return done(commonStrings.userNotFound);
-                }
-                /**
-                 * Validates password through hash verification.
-                 */
-                luzUtil.validatePassword(user, password, function (err, result) {
-                    return done(err, result);
-                })
-            });
-        });
-    }
-));
+luzAuth(passport);
 
-
+/**
+ * Express starting up.
+ */
 var app = express();
 
 /**
- * Internal middleware setup
+ * Internal Express middleware setup
  */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -129,6 +90,9 @@ buildMenuItems(menuItems, pages, "/");
  */
 function buildMenuItems(items, pages, parentUrl) {
     for (var p in pages) {
+        /**
+         * Checks if page has a menu item definition.
+         */
         if (pages[p].hasOwnProperty('menuItem')) {
             if (pages[p].menuItem.subItems === true) {
                 pages[p].menuItem.subItems = [];
@@ -136,6 +100,9 @@ function buildMenuItems(items, pages, parentUrl) {
 
             var itemUrl = parentUrl + (p === 'index' ? '' : p);
             pages[p].menuItem.url = itemUrl;
+            /**
+             * Recursiveness for menu sub-items.
+             */
             buildMenuItems(pages[p].menuItem.subItems, pages[p], itemUrl + "/");
             items.push(pages[p].menuItem);
         }
@@ -143,39 +110,43 @@ function buildMenuItems(items, pages, parentUrl) {
 }
 
 /**
- * Setups all pages and builds up an Express Router object setting its proper routes and controllers based on the pages folder.
+ * Setups all pages shaping up an Express Router object with its proper routes and controllers based on the pages folder.
  * @param pages The pages to be processed.
  * @param parentUrl The string reference for the parent route in URL format.
  * @param cb The callback function when the setup is done passing out the built router
  * @param cb The external router param for recursive calling.
  */
 function setupPages(pages, parentUrl, cb, router) {
+    /**
+     * If router object is empty, create one.
+     */
     if (!router) {
         router = express.Router();
     }
     for (var r in pages) {
+        /**
+         * Checks if page has a controller defined, if not, will be treated as a DIRECTORY.
+         */
         if (pages[r].hasOwnProperty('controller')) {
             var tUrl = parentUrl + (r === 'index' ? '' : r);
-            for (var m in pages[r].controller)
-            {
-                var checkUserAuth = pages[r].controller.get.allowAnonymous ? luzUtil.allowAnonymous : luzUtil.checkAuth;
-                switch (m) {
-                    case "get":
-                        router.get(tUrl,checkUserAuth, pages[r].controller.get.action);
-                        break;
-                    case "post":
-                        router.post(tUrl,checkUserAuth, pages[r].controller.post.action);
-                        break;
-                }
+            for (var m in pages[r].controller) {
+                var checkUserAuth = pages[r].controller[m].auth ? pages[r].controller[m].auth : luzUtil.checkAuth;
+                router[m](tUrl, checkUserAuth, pages[r].controller[m].action)
             }
         }
         else {
+            /**
+             * Implementing recursive directories and files, ignoring menu item definition files (menuItem.js).
+             */
             if (r != 'menuItem') {
                 setupPages(pages[r], parentUrl + r + '/', function () {
                 }, router);
             }
         }
     }
+    /**
+     * All done, router is ready to roll.
+     */
     cb(router);
 }
 
@@ -272,7 +243,7 @@ global.getCurrentPage = function (req, cb) {
              */
             var url = currentPage.breadCrumb[currentPage.breadCrumb.length - 1].url;
             if (url.substr(0, url.length - 1) == req.url) {
-             return cb(currentPage);
+                return cb(currentPage);
             }
         }
         var breadCrumb = [];

@@ -2,7 +2,8 @@
  * Created by Pedro Luz on 23/08/2014.
  */
 var commonStrings = require('../commonStrings');
-var _ = require('underscore')
+var _ = require('lodash-node');
+var luzUtil =  require("../LuzUtil");
 var passport = require('passport');
 
 /* GET users listing. */
@@ -11,7 +12,7 @@ var loginController = {
         action: function (req, res) {
             res.render("login", {layout: 'standalone'});
         },
-        allowAnonymous: true
+        auth: luzUtil.allowAnonymous
     },
     post: {
         action: function (req, res, next) {
@@ -28,7 +29,8 @@ var loginController = {
                 });
             })(req, res, next);
         },
-        allowAnonymous: true}
+        auth: luzUtil.allowAnonymous
+    }
 };
 
 var loginPage =
@@ -53,8 +55,8 @@ var loginPage =
 };
 
 /**
- * Extend login page object with specific common strings.
+ * Merge login page object with specific common strings.
  */
-_.extend(loginPage, commonStrings.login);
+_.merge(loginPage, commonStrings.login);
 
 module.exports = loginPage;
