@@ -57,9 +57,13 @@
                 <form id="frmLogin" name="frmLogin" method="post" action="/login">
                     <h4 class="nomargin">{{currentPage.loginTitle}}</h4>
                     <p class="mt5 mb20">Login to access your account.</p>
+                    <div ng-if="currentPage.error" class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <strong>{{currentPage.error}}</strong>
+                    </div>
 
-                    <input type="text" class="form-control uname" placeholder="Username" />
-                    <input type="password" class="form-control pword" placeholder="Password" />
+                    <input id="username" name="username" type="text" class="form-control uname" placeholder="Username" />
+                    <input id="password" name="password" type="password" class="form-control pword" placeholder="Password" />
                     <a href=""><small>Forgot Your Password?</small></a>
                     <button onclick="$('#frmLogin').submit();" class="btn btn-success btn-block">{{currentPage.loginTitle}}</button>
 

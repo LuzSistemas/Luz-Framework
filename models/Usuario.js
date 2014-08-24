@@ -3,53 +3,26 @@
  */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+var luzUtil = require('../LuzUtil');
 /**
  * User schema definition
  * @type {Schema}
  */
 var usuarioSchema = new Schema({
-    username: {type: String, required: true, index: {unique: true}},
+    username: {type: String, required: true, lowercase: true, index: {unique: true}},
     password: {type: String, required: true},
-    salt: {type: String}
+    email: {type: String, required: true, lowercase: true},
+    salt: {type: String, default: 'defaultHash', required: true}
 });
 
 /**
- * Validates a user given a password.
- * @param user The user to be validated.
- * @param pwd Any given password to be validated.
- * @param cb Callback function(err, result).
- */
-function validatePassword(user, pwd, cb) {
-    var pass = require('pwd');
-    pass.hash(pwd, user.salt, function (err, hash) {
-        if (err) {
-            cb(err);
-        }
-        cb(null, user.password == hash ? user : false);
-    });
-}
-
-/**
- * Instance method version of the validatePassword method
- * @param pwd Given password.
- * @param cb Callback function(err, result).
- */
-usuarioSchema.methods.validatePassword = function (pwd, cb) {
-    validatePassword(this, pwd, cb)
-};
-
-/**
- * Static helper method for user login.
+ * Static helper method for retrieving an user by it's username.
  * @param username A given username.
- * @param pwd A given password.
  * @param cb A callback function(err, result)
  */
-usuarioSchema.statics.login = function (username, pwd, cb) {
-    this.find({username: username}, function (err, user) {
-        if (err) {
-            cb(err, null);
-        }
-        validatePassword(user, pwd, cb);
+usuarioSchema.statics.getByUsername = function (username, cb) {
+    this.findOne({username: username}, function (err, user) {
+        return cb(err, user);
     });
 };
 
@@ -59,7 +32,6 @@ usuarioSchema.statics.login = function (username, pwd, cb) {
 usuarioSchema.pre('save', function (next) {
     var user = this;
     console.log('hahahah');
-    debugger;
     /**
      * Only hash the password if it has been modified (or is new)
      */

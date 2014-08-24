@@ -7,12 +7,59 @@ var bodyParser = require('body-parser');
 var requireDir = require('require-dir');
 var expressLayouts = require('express-ejs-layouts');
 var session = require('express-session');
-var _ = require('underscore')
+var _ = require('lodash-node')
 var entidadesBig = require('./entidadesBig');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var pwd = require('pwd');
 var commonStrings = require('./commonStrings');
+var luzUtil = require('./LuzUtil');
+
+passport.serializeUser(function (user, done) {
+
+    done(null, user);
+});
+
+passport.deserializeUser(function (user, done) {
+
+    done(null, user);
+});
+
+/**
+ * Defining Passport Local (username and password) logic.
+ */
+passport.use(new LocalStrategy(
+    function (username, password, done) {
+        /**
+         * Make it async!
+         */
+        process.nextTick(function () {
+            /**
+             * Gets the user object by the username provided.
+             */
+            entidadesBig.Usuario.getByUsername(username, function (err, user) {
+                /**
+                 * Return query errors.
+                 */
+                if (err) {
+                    return done(err);
+                }
+                /**
+                 * User not found!
+                 */
+                if (!user) {
+                    return done(commonStrings.userNotFound);
+                }
+                /**
+                 * Validates password through hash verification.
+                 */
+                luzUtil.validatePassword(user, password, function (err, result) {
+                    return done(err, result);
+                })
+            });
+        });
+    }
+));
 
 
 var app = express();
@@ -43,6 +90,7 @@ app.use(passport.session());
  */
 app.use(function (req, res, next) {
     //Grab render function reference
+
     var _render = res.render;
 
     /**
@@ -52,7 +100,7 @@ app.use(function (req, res, next) {
         // override view rendering logic
         res.render = function (view, options, fn) {
             // do some custom logic
-            _.extend(options,
+            _.merge(options,
                 {
                     currentPage: currentPage
                 });
@@ -60,7 +108,6 @@ app.use(function (req, res, next) {
         };
         next();
     });
-
 });
 
 /**
@@ -103,38 +150,29 @@ function buildMenuItems(items, pages, parentUrl) {
  * @param cb The external router param for recursive calling.
  */
 function setupPages(pages, parentUrl, cb, router) {
-    if (!router)
-    {
+    if (!router) {
         router = express.Router();
     }
     for (var r in pages) {
-        if (pages[r].hasOwnProperty('controller'))
-        {
+        if (pages[r].hasOwnProperty('controller')) {
             var tUrl = parentUrl + (r === 'index' ? '' : r);
-            if (pages[r].controller.hasOwnProperty('get'))
+            for (var m in pages[r].controller)
             {
-                for (var m in pages[r].controller)
-                {
-                    switch (m)
-                    {
-                        case "get":
-                            router.get(tUrl, pages[r].controller.get);
-                            break;
-                        case "post":
-                            router.post(tUrl, pages[r].controller.post);
-                            break;
-                    }
+                var checkUserAuth = pages[r].controller.get.allowAnonymous ? luzUtil.allowAnonymous : luzUtil.checkAuth;
+                switch (m) {
+                    case "get":
+                        router.get(tUrl,checkUserAuth, pages[r].controller.get.action);
+                        break;
+                    case "post":
+                        router.post(tUrl,checkUserAuth, pages[r].controller.post.action);
+                        break;
                 }
-            }
-            else
-            {
-                router.get(tUrl, pages[r].controller);
-                router.post(tUrl, pages[r].controller);
             }
         }
         else {
             if (r != 'menuItem') {
-                setupPages(pages[r], parentUrl + r + '/', function(){}, router);
+                setupPages(pages[r], parentUrl + r + '/', function () {
+                }, router);
             }
         }
     }
@@ -146,7 +184,7 @@ function setupPages(pages, parentUrl, cb, router) {
  */
 app.use('/api/menuItems', function (req, res) {
     //TODO: Filter menu items per user permissions and roles!!
-    debugger;
+
     res.send(menuItems);
 });
 
@@ -155,7 +193,7 @@ app.use('/api/menuItems', function (req, res) {
  */
 app.use('/api/pages', function (req, res) {
     //TODO: Filter menu items per user permissions and roles!!
-    debugger;
+
     res.send(pages);
 });
 
@@ -224,63 +262,46 @@ global.getCurrentPage = function (req, cb) {
      * Checks if the last route url is a file, if it is, ignore the current page logic for this request.
      */
     if (urlRoutes[urlRoutes.length - 1].indexOf('.') > -1) {
-        cb(null);
-        return;
+        return cb(null);
     }
-    var currentPage = req.session.currentPage;
-    if (currentPage) {
-        /**
-         * Check if page has been changed.
-         */
-        var url = currentPage.breadCrumb[currentPage.breadCrumb.length - 1].url;
-        if (url.substr(0, url.length - 1) == req.url) {
-            cb(currentPage);
-            return;
+    else {
+        var currentPage = req.session.currentPage;
+        if (currentPage) {
+            /**
+             * Check if page has been changed.
+             */
+            var url = currentPage.breadCrumb[currentPage.breadCrumb.length - 1].url;
+            if (url.substr(0, url.length - 1) == req.url) {
+             return cb(currentPage);
+            }
         }
+        var breadCrumb = [];
+        currentPage = global.pages;
+        var urlPath = global.cleanArray(req.originalUrl.split('?')[0].split('/'), '');
+        if (!urlPath.length) {
+            urlPath = ['index'];
+        }
+        var currUrl = "/";
+        for (var r in urlPath) {
+            var tUrl = urlPath[r] === '/' ? 'index' : urlPath[r];
+            currentPage = currentPage[tUrl];
+            currUrl += urlPath[r] + "/";
+            if (currentPage.hasOwnProperty('pageTitle')) {
+                breadCrumb.push({title: currentPage.pageTitle, url: currUrl});
+            }
+            else if (currentPage.hasOwnProperty('menuItem')) {
+                breadCrumb.push({title: currentPage.menuItem.title});
+            }
+            else {
+                breadCrumb.push({title: urlPath[r]});
+            }
+        }
+        breadCrumb[breadCrumb.length - 1].active = true;
+        currentPage.breadCrumb = breadCrumb;
+        //Sets session variable for caching
+        req.session.currentPage = currentPage;
+        return cb(currentPage);
     }
-    var breadCrumb = [];
-    currentPage = global.pages;
-    var urlPath = global.cleanArray(req.originalUrl.split('?')[0].split('/'), '');
-    if (!urlPath.length) {
-        urlPath = ['index'];
-    }
-    var currUrl = "/";
-    for (var r in urlPath) {
-        var tUrl = urlPath[r] === '/' ? 'index' : urlPath[r];
-        currentPage = currentPage[tUrl];
-        currUrl += urlPath[r] + "/";
-        if (currentPage.hasOwnProperty('pageTitle')) {
-            breadCrumb.push({title: currentPage.pageTitle, url: currUrl});
-        }
-        else if (currentPage.hasOwnProperty('menuItem')) {
-            breadCrumb.push({title: currentPage.menuItem.title});
-        }
-        else {
-            breadCrumb.push({title: urlPath[r]});
-        }
-    }
-    breadCrumb[breadCrumb.length - 1].active = true;
-    currentPage.breadCrumb = breadCrumb;
-    //Sets session variable for caching
-    req.session.currentPage = currentPage;
-    cb(currentPage);
 };
-
-passport.use(new LocalStrategy(
-    function (username, password, done) {
-        entidadesBig.Usuario.find({email: username}, function (err, user) {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                return done(null, false, { message: commonStrings.userNotFound });
-            }
-            if (!user.validPassword(password)) {
-                return done(null, false, { message: commonStrings.wrongPassword });
-            }
-            return done(null, user);
-        });
-    }
-));
 
 module.exports = app;

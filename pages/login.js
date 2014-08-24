@@ -3,22 +3,32 @@
  */
 var commonStrings = require('../commonStrings');
 var _ = require('underscore')
-
+var passport = require('passport');
 
 /* GET users listing. */
 var loginController = {
-    get: function (req, res) {
-        debugger;
-        res.render("login", {layout: 'standalone'});
+    get: {
+        action: function (req, res) {
+            res.render("login", {layout: 'standalone'});
+        },
+        allowAnonymous: true
     },
-    post: function(req,res)
-    {
-        debugger;
-        passport.authenticate('local', { failureRedirect: '/login' }),
-            function (req, res) {
-                res.redirect('/');
-            };
-    }
+    post: {
+        action: function (req, res, next) {
+            passport.authenticate('local', function (err, user) {
+                if (err) {
+                    debugger;
+                    return res.render('login', {currentPage: {error: err}, layout: 'standalone'});
+                }
+                req.logIn(user, function (err) {
+                    if (err) {
+                        return next(err);
+                    }
+                    return res.redirect('/pessoa/nova');
+                });
+            })(req, res, next);
+        },
+        allowAnonymous: true}
 };
 
 var loginPage =
