@@ -1,7 +1,7 @@
 /**
  * Created by Pedro Luz on 24/08/2014.
  */
-var entidadesBig = require('./entidadesBig');
+var entidadesBig = require('./bigJsEntities');
 var commonStrings = require('./commonStrings');
 var luzUtil = require('./LuzUtil');
 var LocalStrategy = require('passport-local').Strategy;
@@ -13,8 +13,10 @@ module.exports =
             done(null, user.id);
         });
 
-        passport.deserializeUser(function (userId, done) {
-            entidadesBig.Usuario.findOne({id: userId}, function (err, user) {
+        passport.deserializeUser(function (userId, done)
+        {
+            entidadesBig.User.findOne({_id: userId}, function (err, user)
+            {
                 done(err, user);
             });
         });
@@ -31,7 +33,7 @@ module.exports =
                     /**
                      * Gets the user object by the username provided.
                      */
-                    entidadesBig.Usuario.getByUsername(username, function (err, user) {
+                    entidadesBig.User.getByUsername(username, function (err, user) {
                         /**
                          * Return query errors.
                          */

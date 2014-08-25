@@ -4,6 +4,7 @@
 module.exports = {
     userNotFound: "Usuário não encontrado!",
     wrongPassword: "Senha incorreta!",
+    viewDashboard: "Visualizar dashboard",
     login: {
         pageTitle: "Big JS - Login",
         systemTitle: "BigJS",

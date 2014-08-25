@@ -1,22 +1,23 @@
 /* GET home page. */
 var indexController = {
     get: {
+        auth: require("../LuzUtil").allowAnonymous,
         action: function(req, res) {
 
             //    res.render("layout", {});
             //    return;
-            var entidadesBig = require('../entidadesBig');
+            var entidadesBig = require('../bigJsEntities');
             //    entidadesBig.Pessoa.update(req.query, {$set: {cpf: '999.999.999-99'}}, {multi: true}, function (e, i){
             //        entidadesBig.Pessoa.find(req.query, function(err, pessoas)
             //        {
             //            res.send({erros:err, registrosAfetados: i, pessoas: pessoas});
             //        });
             //    });
-            var novaPessoa = new entidadesBig.Usuario(req.query);
+            var novaPessoa = new entidadesBig.User(req.query);
             novaPessoa.save(function(err) {
                 if (err) return console.log(err);
                 // saved!
-                entidadesBig.Usuario.find({}, function(err, pessoas) {
+                entidadesBig.User.find({}, function(err, pessoas) {
                     res.render('index', {
                         teste: pessoas
                     });

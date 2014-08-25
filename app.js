@@ -7,13 +7,14 @@ var bodyParser = require('body-parser');
 var requireDir = require('require-dir');
 var expressLayouts = require('express-ejs-layouts');
 var session = require('express-session');
-var _ = require('lodash-node')
-var entidadesBig = require('./entidadesBig');
+var _ = require('lodash-node');
+var entidadesBig = require('./bigJsEntities');
 var passport = require('passport');
 var pwd = require('pwd');
 var commonStrings = require('./commonStrings');
 var luzUtil = require('./LuzUtil');
 var luzAuth = require('./LuzAuth');
+var userPermissions = require("./UserPermissions");
 
 /**
  * Setup authentication using Passport.
@@ -57,7 +58,7 @@ app.use(function (req, res, next) {
     /**
      * Gets current page object and continues the common view rendering behavior
      */
-    getCurrentPage(req, function (currentPage) {
+    luzUtil.getCurrentPage(req, function (currentPage) {
         // override view rendering logic
         res.render = function (view, options, fn) {
             // do some custom logic
@@ -75,11 +76,22 @@ app.use(function (req, res, next) {
  * Builds page objects from pages folder.
  * @type {*|map|exports}
  */
-var pages = requireDir('./pages', { recurse: true });
+var pages = requireDir('./routes', { recurse: true });
 global.pages = pages;
 var menuItems = [];
-setupPages(pages, "/", function (router) {
+setupPages(pages, "/", function (router, extractedPermissions) {
     app.use(router);
+    _.forEach(extractedPermissions, function(newPermission) {
+        /**
+         * Ingore permissions with the same key.
+         */
+        if (_.isUndefined(userPermissions[newPermission.key]))
+        {
+            var key = newPermission.key;
+            delete newPermission.key;
+            userPermissions[key] = newPermission;
+        }
+    });
 });
 buildMenuItems(menuItems, pages, "/");
 
@@ -120,6 +132,7 @@ function setupPages(pages, parentUrl, cb, router) {
     /**
      * If router object is empty, create one.
      */
+    var userPermissions = [];
     if (!router) {
         router = express.Router();
     }
@@ -127,11 +140,16 @@ function setupPages(pages, parentUrl, cb, router) {
         /**
          * Checks if page has a controller defined, if not, will be treated as a DIRECTORY.
          */
-        if (pages[r].hasOwnProperty('controller')) {
+        if (pages[r].hasOwnProperty('controller'))
+        {
             var tUrl = parentUrl + (r === 'index' ? '' : r);
             for (var m in pages[r].controller) {
-                var checkUserAuth = pages[r].controller[m].auth ? pages[r].controller[m].auth : luzUtil.checkAuth;
-                router[m](tUrl, checkUserAuth, pages[r].controller[m].action)
+                var userAuthenticationStrategy = pages[r].controller[m].auth ? pages[r].controller[m].auth : luzUtil.checkAuth;
+                if (pages[r].controller[m].action.necessaryPermissions)
+                {
+                    userPermissions = userPermissions.concat(pages[r].controller[m].action.necessaryPermissions);
+                }
+                router[m](tUrl, userAuthenticationStrategy, pages[r].controller[m].action)
             }
         }
         else {
@@ -139,7 +157,9 @@ function setupPages(pages, parentUrl, cb, router) {
              * Implementing recursive directories and files, ignoring menu item definition files (menuItem.js).
              */
             if (r != 'menuItem') {
-                setupPages(pages[r], parentUrl + r + '/', function () {
+                setupPages(pages[r], parentUrl + r + '/', function (rr, permissions)
+                {
+                    userPermissions = userPermissions.concat(permissions);
                 }, router);
             }
         }
@@ -147,7 +167,7 @@ function setupPages(pages, parentUrl, cb, router) {
     /**
      * All done, router is ready to roll.
      */
-    cb(router);
+    cb(router, userPermissions);
 }
 
 /**
@@ -162,7 +182,7 @@ app.use('/api/menuItems', function (req, res) {
 /**
  * Returns all page objects to the client.
  */
-app.use('/api/pages', function (req, res) {
+app.use('/api/routes', function (req, res) {
     //TODO: Filter menu items per user permissions and roles!!
 
     res.send(pages);
@@ -201,78 +221,5 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
-
-/**
- * Helper function for removing specific values from an Array instance.
- * @param deleteValue The value to be removed.
- * @returns {Array} The Array instance already cleaned up.
- */
-global.cleanArray = function (arr, deleteValue) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i] == deleteValue) {
-            arr.splice(i, 1);
-            i--;
-        }
-    }
-    return arr;
-};
-
-/**
- * Gets the current page and it's breadcrumb object.
- * @param req The request relayed from the controller.
- * @param cb The callback for getting this result: function(currentPage)
- */
-global.getCurrentPage = function (req, cb) {
-    /**
-     * Gets current page from session.
-     * @type {*|currentPage|$scope.currentPage}
-     */
-
-    var urlRoutes = req.url.split('/');
-    /**
-     * Checks if the last route url is a file, if it is, ignore the current page logic for this request.
-     */
-    if (urlRoutes[urlRoutes.length - 1].indexOf('.') > -1) {
-        return cb(null);
-    }
-    else {
-        var currentPage = req.session.currentPage;
-        if (currentPage) {
-            /**
-             * Check if page has been changed.
-             */
-            var url = currentPage.breadCrumb[currentPage.breadCrumb.length - 1].url;
-            if (url.substr(0, url.length - 1) == req.url) {
-                return cb(currentPage);
-            }
-        }
-        var breadCrumb = [];
-        currentPage = global.pages;
-        var urlPath = global.cleanArray(req.originalUrl.split('?')[0].split('/'), '');
-        if (!urlPath.length) {
-            urlPath = ['index'];
-        }
-        var currUrl = "/";
-        for (var r in urlPath) {
-            var tUrl = urlPath[r] === '/' ? 'index' : urlPath[r];
-            currentPage = currentPage[tUrl];
-            currUrl += urlPath[r] + "/";
-            if (currentPage.hasOwnProperty('pageTitle')) {
-                breadCrumb.push({title: currentPage.pageTitle, url: currUrl});
-            }
-            else if (currentPage.hasOwnProperty('menuItem')) {
-                breadCrumb.push({title: currentPage.menuItem.title});
-            }
-            else {
-                breadCrumb.push({title: urlPath[r]});
-            }
-        }
-        breadCrumb[breadCrumb.length - 1].active = true;
-        currentPage.breadCrumb = breadCrumb;
-        //Sets session variable for caching
-        req.session.currentPage = currentPage;
-        return cb(currentPage);
-    }
-};
 
 module.exports = app;

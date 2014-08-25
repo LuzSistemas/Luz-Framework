@@ -6,10 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="/javascripts/angular/angular.min.js"></script>
-    <script>
-        window.BigJS = angular.module('BigJS',[]);
-        window.currentPage = JSON.parse('<%- JSON.stringify(currentPage) %>');
-    </script>
+    <%- include partials/pageSetup.ejs %>
     <script src="/javascripts/angular/controllers/MasterController.js"></script>
     <title><%= currentPage.pageTitle %></title>
 

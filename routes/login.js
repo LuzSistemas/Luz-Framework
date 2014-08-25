@@ -3,7 +3,7 @@
  */
 var commonStrings = require('../commonStrings');
 var _ = require('lodash-node');
-var luzUtil =  require("../LuzUtil");
+var luzUtil = require("../LuzUtil");
 var passport = require('passport');
 
 /* GET users listing. */
@@ -37,14 +37,16 @@ var loginPage =
 {
     controller: loginController,
     allowSignup: false,
-    leftFooter: {
-        text: "© 2014. Todos os direitos reservados. Sistema BigJS"
-    },
-    rightFooter: {
-        text: "Criado pela: ",
-        link: {
-            url: "http://www.luzsistemas.com.br",
-            text: "Luz Sistemas"
+    footer: {
+        left: {
+            text: "© 2014. Todos os direitos reservados. Sistema BigJS"
+        },
+        right: {
+            text: "Criado pela: ",
+            link: {
+                url: "http://www.luzsistemas.com.br",
+                text: "Luz Sistemas"
+            }
         }
     },
     topics: [

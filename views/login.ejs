@@ -7,10 +7,7 @@
     <meta name="author" content="">
     <script src="/javascripts/angular/angular.min.js"></script>
     <title><%= currentPage.pageTitle %></title>
-    <script>
-        window.BigJS = angular.module('BigJS',[]);
-        window.currentPage = JSON.parse('<%- JSON.stringify(currentPage) %>');
-    </script>
+    <%- include partials/pageSetup.ejs %>
     <link href="/brackets/css/style.default.css" rel="stylesheet">
     <script src="/javascripts/angular/controllers/MasterController.js"></script>
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -48,7 +45,7 @@
                     </ul>
                     <div class="mb20"></div>
                     <strong ng-if="currentPage.allowSignup">Não tem cadastro? <a href="/signup.html">Cadastrar-se</a></strong>
-                </div><!-- signin0-info -->
+                </div><!-- signin-info -->
 
             </div><!-- col-sm-7 -->
 
@@ -73,11 +70,11 @@
         </div><!-- row -->
 
         <div class="signup-footer">
-            <div class="pull-left" ng-if="currentPage.leftFooter && currentPage.leftFooter.text">
-                {{currentPage.leftFooter.text}}
+            <div class="pull-left" ng-if="currentPage.footer && currentPage.footer.left && currentPage.footer.left.text">
+                {{currentPage.footer.left.text}}
             </div>
-            <div class="pull-right" ng-if="currentPage.rightFooter && currentPage.rightFooter.text">
-                {{currentPage.rightFooter.text}} <a ng-if="currentPage.rightFooter.link" href="{{currentPage.rightFooter.link.url}}" get="_blank">{{currentPage.rightFooter.link.text}}</a>
+            <div class="pull-right" ng-if="currentPage.footer && currentPage.footer.right && currentPage.footer.right.text">
+                {{currentPage.footer.right.text}} <a ng-if="currentPage.footer.right.link" href="{{currentPage.footer.right.link.url}}" get="_blank">{{currentPage.footer.right.link.text}}</a>
             </div>
         </div>
     </div><!-- signin -->
