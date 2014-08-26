@@ -171,12 +171,19 @@ function setupPages(pages, parentUrl, cb, router) {
 }
 
 /**
- * Returns all menu items to the client.
- */
+* Returns all menu items to the client.
+    */
 app.use('/api/menuItems', function (req, res) {
     //TODO: Filter menu items per user permissions and roles!!
 
     res.send(menuItems);
+});
+
+/**
+* Returns all menu items to the client.
+*/
+app.use('/api/commonStrings', function (req, res) {
+    res.send(commonStrings);
 });
 
 /**

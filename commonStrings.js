@@ -5,14 +5,10 @@ module.exports = {
     userNotFound: "Usuário não encontrado!",
     wrongPassword: "Senha incorreta!",
     viewDashboard: "Visualizar dashboard",
-    login: {
-        pageTitle: "Big JS - Login",
-        systemTitle: "BigJS",
-        welcomeText: "Bem vindo ao sistema BigJS Beta!",
-        notRegistered: "Não está registrado?",
-        signUp: "Cadastrar-se",
-        loginTitle: "Login",
-        loginDescription: "Faça login para acessar sua conta.",
-        forgotPassword: "Esqueceu sua senha?"
-    }
+    search: "Buscar",
+    register: "Cadastrar",
+    notRegistered: "Não registrado",
+    loginIntoAccount: 'Faça seu login',
+    forgotPassword: 'Esqueci minha senha',
+    here: "Aqui"
 }

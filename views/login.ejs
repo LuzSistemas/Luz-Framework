@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <script src="/javascripts/angular/angular.min.js"></script>
-    <title><%= currentPage.pageTitle %></title>
+    <title><%= currentPage.title %></title>
     <%- include partials/pageSetup.ejs %>
     <link href="/brackets/css/style.default.css" rel="stylesheet">
     <script src="/javascripts/angular/controllers/MasterController.js"></script>
@@ -44,7 +44,7 @@
                         <li ng-repeat="t in currentPage.topics"><i class="fa {{t.icon}} mr5"></i> {{t.text}}</li>
                     </ul>
                     <div class="mb20"></div>
-                    <strong ng-if="currentPage.allowSignup">Não tem cadastro? <a href="/signup.html">Cadastrar-se</a></strong>
+                    <strong ng-if="currentPage.allowSignup">{{strings.notRegistered}}?<a href="/signup.html">{{strings.register}}</a></strong>
                 </div><!-- signin-info -->
 
             </div><!-- col-sm-7 -->
@@ -53,7 +53,7 @@
 
                 <form id="frmLogin" name="frmLogin" method="post" action="/login">
                     <h4 class="nomargin">{{currentPage.loginTitle}}</h4>
-                    <p class="mt5 mb20">Login to access your account.</p>
+                    <p class="mt5 mb20">{{strings.loginIntoAccount}}.</p>
                     <div ng-if="currentPage.error" class="alert alert-danger">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                         <strong>{{currentPage.error}}</strong>
@@ -61,7 +61,7 @@
 
                     <input id="username" name="username" type="text" class="form-control uname" placeholder="Username" />
                     <input id="password" name="password" type="password" class="form-control pword" placeholder="Password" />
-                    <a href=""><small>Forgot Your Password?</small></a>
+                    <a href=""><small>{{strings.forgotPassword}}</small></a>
                     <button onclick="$('#frmLogin').submit();" class="btn btn-success btn-block">{{currentPage.loginTitle}}</button>
 
                 </form>
@@ -83,6 +83,7 @@
 
 
 <script src="/brackets/js/jquery-1.10.2.min.js"></script>
+<script src="/brackets/js/jquery.cookies.js"></script>
 <script src="/brackets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="/brackets/js/bootstrap.min.js"></script>
 <script src="/brackets/js/modernizr.min.js"></script>

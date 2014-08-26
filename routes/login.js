@@ -37,6 +37,10 @@ var loginPage =
 {
     controller: loginController,
     allowSignup: false,
+    title: 'Big JS - Login',
+    systemTitle: 'BigJS',
+    loginTitle: 'BigJS',
+    welcomeText: 'Bem vindo ao BigJS beta!',
     footer: {
         left: {
             text: "© 2014. Todos os direitos reservados. Sistema BigJS"
@@ -55,10 +59,4 @@ var loginPage =
         {icon: 'fa-flash', text: 'Desenvolvimento a jato com JS!'},
     ]
 };
-
-/**
- * Merge login page object with specific common strings.
- */
-_.merge(loginPage, commonStrings.login);
-
 module.exports = loginPage;

@@ -10,14 +10,14 @@ module.exports =
     function(passport)
     {
         passport.serializeUser(function (user, done) {
-            done(null, user.id);
+            return done(null, user.id);
         });
 
         passport.deserializeUser(function (userId, done)
         {
-            entidadesBig.User.findOne({_id: userId}, function (err, user)
+            entidadesBig.system.User.findOne({_id: userId}, function (err, user)
             {
-                done(err, user);
+                return done(err, user);
             });
         });
 
@@ -33,7 +33,7 @@ module.exports =
                     /**
                      * Gets the user object by the username provided.
                      */
-                    entidadesBig.User.getByUsername(username, function (err, user) {
+                    entidadesBig.system.User.getByUsername(username, function (err, user) {
                         /**
                          * Return query errors.
                          */

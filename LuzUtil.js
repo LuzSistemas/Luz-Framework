@@ -34,7 +34,7 @@ module.exports = {
             var tMethod = req.method.toLowerCase();
             var user = req.user;
             if (user.superAdmin) {
-                next();
+                return next();
             }
             if (currentPage && currentPage.controller[tMethod] && !_.isEmpty(currentPage.controller[tMethod].necessaryPermissions)) {
                 var necessaryPermissions = currentPage.controller[tMethod].necessaryPermissions;
@@ -117,13 +117,20 @@ module.exports = {
             var currUrl = "/";
             for (var r in urlPath) {
                 var tUrl = urlPath[r] === '/' ? 'index' : urlPath[r];
+                /**
+                 * Fix for pages with missing info.
+                 */
+                if (_.isUndefined(currentPage[tUrl]))
+                {
+                    currentPage[tUrl] = {};
+                }
                 currentPage = currentPage[tUrl];
                 currUrl += urlPath[r] + "/";
-                if (currentPage.hasOwnProperty('pageTitle')) {
+                if (currentPage.hasOwnProperty('title')) {
                     breadCrumb.push({
-                        title: currentPage.pageTitle,
+                        title: currentPage.title,
                         url: currUrl
-                    });
+                        });
                 } else if (currentPage.hasOwnProperty('menuItem')) {
                     breadCrumb.push({
                         title: currentPage.menuItem.title
@@ -140,5 +147,19 @@ module.exports = {
             req.session.currentPage = currentPage;
             return cb(currentPage);
         }
+    },
+    setProperty: function (obj, path, value)
+    {
+        var tObj = obj;
+        var paths = path.split('.');
+        for (i = 0; i < paths.length - 1; i++)
+        {
+            if (_.isUndefined(tObj[paths[i]]))
+            {
+                tObj[paths[i]] = {}
+            }
+            tObj = tObj[paths[i]];
+        }
+        tObj[paths[paths.length - 1]] = value;
     }
 };

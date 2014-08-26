@@ -11,6 +11,7 @@ var userSchema = {
     username: {type: String, required: true, lowercase: true, index: {unique: true}},
     password: {type: String, required: true},
     email: {type: String, required: true, lowercase: true},
+    superAdmin: {type: Boolean, default: false},
     salt: {type: String, default: 'defaultHash', required: true}
 };
 

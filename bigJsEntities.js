@@ -1,14 +1,22 @@
 /**
  * Created by Pedro Luz on 19/08/2014.
  */
+
+if (global.models)
+{
+    module.exports = global.models;
+    return;
+}
 var entities = {};
 var mongoose = require('mongoose');
 var config = require("./config");
+var luzUtil = require("./LuzUtil");
 var models = require('require-dir')('./models', {
     recurse: true
 });
 
 setupModels(models,[]);
+global.models = models;
 
 /**
  * Helper function for models setup
@@ -22,7 +30,7 @@ function setupModels(model, parentModels) {
             if (model[m].setup) {
                 model[m].setup(schema);
             }
-            entities[m] = mongoose.model(model[m].key ? model[m].key : parentModels.join('.') + "." +  m, schema);
+            luzUtil.setProperty(entities, (parentModels.length > 0 ? parentModels.join('.') + "." : "") + m, mongoose.model(model[m].key ? model[m].key : parentModels.join('.') + "." +  m, schema))
         }
         else {
             var cParentModel = parentModels.slice(0);
