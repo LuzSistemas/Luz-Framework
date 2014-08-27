@@ -5,11 +5,11 @@ Luz Framework is a straightforward web application framework based on MEAN (Mong
 
 This framework has been created in order to set up a development base for a few software migrations I have in store for some customers.
 
-
 Features (*so far...*)
 =====
-- Filesystem based routing
+- File-system based routing
+  - Current page variable through Angular
 - User authentication (using *Passport*)
   - Permissions (*still incomplete!*
--Menu items
--Model context
+- Menu items
+- Model context
