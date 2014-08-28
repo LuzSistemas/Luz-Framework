@@ -1,0 +1,252 @@
+.headerbar {
+  border-left: 1px solid #eeeeee;
+  background: @white-bg;
+}
+
+.headerbar::after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+.menutoggle {
+  float: left;
+  width: 50px;
+  height: 50px;
+  font-size: 22px;
+  cursor: pointer;
+  color: @main-bg-color;
+  border-right: 1px solid #eeeeee;
+  .transition;
+  .fa, .glyphicon {
+    margin: 14px 0 0 15px;
+  }
+}
+
+.menutoggle:hover {
+  color: @main-bg-color;
+  background-color: #f7f7f7;
+}
+
+.searchform input {
+  width: 250px;
+  background: @white-bg url(../images/icon-search.png) no-repeat 95% center;
+  float: left;
+  padding: 18px 20px;
+  border: 0;
+  border-right: 1px solid #eeeeee;
+  .border-radius(0);
+  height: 50px;
+  font-size: 14px;
+}
+
+.searchform input:focus {
+  .noshadow;
+  border-color: #dddddd;
+}
+
+.searchform-left {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  .form-control {
+    border: 0;
+    background: @main-bg-color;
+  }
+}
+
+.header-left {
+  float: left;
+}
+
+.header-right {
+  float: right;
+}
+
+.headermenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  .dropdown-toggle:hover, .dropdown-toggle:focus, .dropdown-toggle:active, .dropdown-toggle.active, .open .dropdown-toggle.dropdown-toggle {
+    background: #f9f9f9;
+    color: #333333;
+    .noshadow;
+  }
+  > li {
+    display: inline-block;
+    float: left;
+    border-left: 1px solid #eeeeee;
+    position: relative;
+  }
+  .dropdown-toggle {
+    padding: 12px 10px;
+    border-color: @white-color;
+    background: @white-color;
+    .border-radius(0);
+    border: 0;
+    img {
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 26px;
+      .border-radius(50px);
+    }
+    .caret {
+      margin-left: 5px;
+    }
+  }
+  .dropdown-menu {
+    border: 0;
+    margin-top: 0px;
+    margin-right: -1px;
+    .border-radius(2px 0 2px 2px);
+    .box-shadow(3px 3px 0, rgba(12,12,12,0.05));
+    padding: 5px;
+    li {
+      display: block;
+      margin: 0;
+      float: none;
+      background: none;
+      padding: 15px 5px;
+      a {
+        color: #94989d;
+        font-size: 13px;
+        padding: 7px 10px;
+        .border-radius(2px);
+        .transition;
+      }
+      a:hover {
+        background: @success-color;
+        color: @white-color;
+      }
+      i {
+        font-size: 11px;
+        margin-right: 5px;
+      }
+    }
+  }
+  .dropdown-menu:after {
+    border-bottom: 6px solid #1d2939;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    content: "";
+    display: inline-block;
+    right: 17px;
+    position: absolute;
+    top: -6px;
+  }
+  .dropdown-grid .grid-list {
+    padding: 20px;
+  }
+  .dropdown-menu-usermenu {
+    background: @main-bg-color;
+    min-width: 200px;
+    li {
+      padding: 0;
+    }
+  }
+  .dropdown-menu-usermenu:after {
+    right: 95px;
+  }
+  .dropdown-menu-head {
+    padding: 0;
+    min-width: 300px;
+    ul {
+      border: 1px solid #dddddd;
+      border-top: 0;
+      padding: 0 10px;
+    }
+    li a {
+      color: #333333;
+      padding: 0;
+      opacity: 1;
+    }
+    li a:hover {
+      background: none;
+      color: #428bca;
+      text-decoration: none;
+    }
+  }
+  .tp-icon {
+    padding: 12px 15px;
+    height: 50px;
+    font-size: 16px;
+    background: @white-color;
+    color: #333333;
+    border-color: @white-color;
+    .transition;
+    + .dropdown-menu:after {
+      right: 17px;
+    }
+  }
+  .chat-icon {
+    border-right: 0;
+  }
+  .btn-group {
+    margin-bottom: 0;
+  }
+}
+
+.headermenu:after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+.dropdown-list li {
+  padding: 15px;
+  overflow: hidden;
+  border-bottom: 1px solid #eeeeee;
+  .badge {
+    float: right;
+  }
+}
+
+.dropdown-list li:last-child {
+  border-bottom: 0;
+  padding: 7px 5px;
+}
+
+.dropdown-list .thumb {
+  width: 36px;
+  float: left;
+  img {
+    width: 100%;
+    display: block;
+    vertical-align: middle;
+  }
+}
+
+.dropdown-list .desc {
+  margin-left: 45px;
+  display: block;
+  h5 {
+    font-size: 13px;
+    margin-top: 7px;
+  }
+}
+
+.user-list {
+  width: 300px;
+}
+
+.gen-list li a {
+  display: block;
+}
+
+.gen-list li a:hover {
+  color: #333333 !important;
+  text-decoration: none;
+}
+
+.gen-list li .name {
+  font-size: 13px;
+  font-family: @font-family-bold;
+  line-height: 21px;
+  display: block;
+}
+
+.gen-list li .msg {
+  font-size: 11px;
+  line-height: normal;
+  color: #999999;
+  display: block;
+}

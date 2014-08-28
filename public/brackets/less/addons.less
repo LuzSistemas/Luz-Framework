@@ -1,0 +1,417 @@
+// FIXED WIDTH
+
+.fixed {
+  background: #c9cccf;
+  section {
+    margin: auto;
+    max-width: 1050px;
+    position: relative;
+    background: @main-bg-color;
+  }
+  .rightpanel {
+    background: @main-bg-color;
+  }
+}
+
+.fixed-noleft .leftpanel {
+  display: none;
+}
+
+.fixed-noleft .mainpanel {
+  margin-left: 0;
+}
+
+.fixed-noleft .menutoggle {
+  display: none;
+}
+
+.fixed-noleft.chat-view .headerbar {
+  margin-left: 0;
+}
+
+.fixed-noleft.chat-view .logopanel {
+  display: block;
+}
+
+// MODALS
+
+.bs-example-modal-panel .modal-content {
+  background: none;
+}
+
+.modal-photo-viewer {
+  margin-top: 0;
+  margin-bottom: 0;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  position: absolute;
+  .modal-content {
+    position: relative;
+    width: 900px;
+    height: 600px;
+    margin-left: -50%;
+    margin-top: -300px;
+  }
+  .modal-photo-left {
+    padding: 0;
+    background: #000000;
+  }
+  .modal-photo-right {
+    padding: 0;
+  }
+  .modal-photo {
+    top: 50%;
+    position: relative;
+  }
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .img-responsive {
+    max-height: 600px;
+    margin: auto;
+  }
+}
+
+.media-details {
+  padding: 20px;
+  .categ {
+    font-size: 11px;
+  }
+  .media-title {
+    margin: 0;
+    margin-bottom: 10px;
+    color: #333333;
+    font-size: 20px;
+  }
+  p {
+    font-size: 13px;
+  }
+  .details {
+    margin-top: 20px;
+    h4 {
+      font-size: 12px;
+      color: #333333;
+      text-transform: uppercase;
+      font-family: @font-family-bold;
+    }
+  }
+  .table {
+    .noshadow;
+    tr td {
+      padding: 3px 0;
+      font-size: 13px;
+      background: none;
+    }
+  }
+}
+
+// TABLES
+
+.table-primary thead tr th {
+  background: @primary-color;
+}
+
+.table-success thead tr th {
+  background: @success-color;
+}
+
+.table-warning thead tr th {
+  background: @warning-color;
+}
+
+.table-danger thead tr th {
+  background: @danger-color;
+}
+
+.table-info thead tr th {
+  background: @info-color;
+}
+
+.table-dark thead tr th {
+  background: @main-bg-color;
+}
+
+.table.table-primary thead tr th,
+.table.table-success thead tr th,
+.table.table-danger thead tr th,
+.table.table-warning thead tr th,
+.table.table-info thead tr th,
+.table.table-dark thead tr th {
+  color: @white-color;
+  border-bottom: 0;
+}
+
+.table-bordered.table-primary thead tr th,
+.table-bordered.table-success thead tr th,
+.table-bordered.table-warning thead tr th,
+.table-bordered.table-danger thead tr th,
+.table-bordered.table-info thead tr th,
+.table-bordered.table-dark thead tr th {
+  border-color: rgba(255,255,255,0.2);
+}
+
+// BUG TRACKER
+
+.panel .panel-table {
+  padding: 0;
+}
+
+.panel-table .table {
+  .noshadow;
+  margin: 0;
+}
+
+.table-buglist {
+  thead tr th:first-child, tbody tr td:first-child {
+    text-align: center;
+    width: 30px;
+  }
+  .fa {
+    cursor: pointer;
+  }
+  .fa-bug {
+    color: @danger-color;
+  }
+  .fa-magic {
+    color: @success-color;
+  }
+  .btn-group {
+    margin: 0;
+    .dropdown-toggle {
+      color: #999999;
+      cursor: pointer;
+    }
+    .dropdown-toggle:hover {
+      color: #666666;
+    }
+  }
+}
+
+.bug-key-title {
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+// STICKY HEADER
+
+.stickyheader .logopanel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  z-index: 100;
+}
+
+.stickyheader .leftpanel {
+  top: 50px;
+}
+
+.stickyheader .sticky-leftpanel {
+  top: 0;
+  .leftpanelinner {
+    margin-top: 55px;
+  }
+}
+
+.stickyheader .headerbar {
+  position: fixed;
+  top: 0;
+  left: 240px;
+  width: 100%;
+  z-index: 100;
+  .box-shadow(0 1px rgba(0,0,0,0.05));
+}
+
+.stickyheader .mainpanel {
+  padding-top: 50px;
+}
+
+.stickyheader .header-right {
+  margin-right: 240px;
+}
+
+.stickyheader.leftpanel-collapsed .headerbar {
+  left: 50px;
+}
+
+.stickyheader.leftpanel-collapsed .header-right {
+  margin-right: 0;
+}
+
+.stickyheader.chat-view .headerbar {
+  right: 240px;
+  width: auto;
+}
+
+// OTHER
+
+.dropdown-menu-head {
+  background: #ffffff;
+  .title {
+    background: @main-bg-color;
+    color: #94989d;
+    padding: 15px;
+    text-transform: uppercase;
+    font-size: 11px;
+    margin: 0;
+  }
+}
+
+.tp-icon {
+  padding: 10px 20px;
+  line-height: 20px;
+  border-color: #dddddd;
+  position: relative;
+  .badge {
+    position: absolute;
+    font-size: 10px;
+    font-weight: normal;
+    right: 4px;
+    top: 10px;
+    line-height: 13px;
+    background-color: @danger-color;
+    .border-radius(2px);
+    padding: 2px 5px;
+  }
+}
+
+.chosen-container-single .chosen-single div {
+  width: 30px;
+  border-left: 1px solid #cccccc;
+  background: #e4e7ea;
+  b {
+    background: url(../images/dropdown-arrow.png) no-repeat 8px 15px;
+  }
+}
+
+.chosen-container-active.chosen-with-drop .chosen-single div {
+  width: 30px;
+  border-left: 0;
+  background: #ffffff;
+  b {
+    background-position: 8px -33px;
+  }
+}
+
+.bootstrap-timepicker-widget.dropdown-menu {
+  width: 230px;
+}
+
+.colorpicker-input {
+  width: 200px;
+  float: left;
+}
+
+.colorselector {
+  margin-top: 4px;
+}
+
+.mb5 {
+  margin-bottom: 5px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+.mb40 {
+  margin-bottom: 40px;
+}
+
+.mr5 {
+  margin-right: 5px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.mr30 {
+  margin-right: 30px;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.nomargin {
+  margin: 0;
+}
+
+.noshadow {
+  .noshadow;
+
+.border-right-0 {
+  border-right: 0;
+}
+
+.border-left-0 {
+  border-left: 0;
+}
+
+.nopadding {
+  padding: 0 !important;
+}
+
+.padding-top-0 {
+  padding-top: 0;
+}
+
+.padding5 {
+  padding: 5px;
+}
+
+.padding10 {
+  padding: 10px;
+}
+
+.serif {
+  font-family: 'Georgia, serif';
+}
+
+.italic {
+  font-style: italic;
+}
+
+.dark {
+  color: #333;
+}
+
+.width100p {
+  width: 100%;
+}
+
+.width20 {
+  width: 20px;
+}
+
+.width30 {
+  width: 30px;
+}
+
+.inblock {
+  display: inline-block;
+}
+

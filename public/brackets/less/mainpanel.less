@@ -1,0 +1,128 @@
+.mainpanel {
+  margin-left: 240px;
+  background: @sub-bg-color;
+  min-height: 1000px;
+}
+.pageheader {
+  padding: 15px;
+  border-bottom: 1px solid #d3d7db;
+  border-top: 1px solid #eeeeee;
+  background: #f7f7f7;
+  position: relative;
+  .glyphicon, .fa {
+    font-size: 24px;
+    margin-right: 5px;
+    padding: 6px 7px;
+    border: 2px solid @main-bg-color;
+    .border-radius(50px);
+  }
+  h2 {
+    font-size: 28px;
+    color: @main-bg-color;
+    letter-spacing: -0.5px;
+    margin: 0;
+    span {
+      font-size: 13px;
+      text-transform: none;
+      color: #999999;
+      font-style: italic;
+      vertical-align: middle;
+      letter-spacing: 0;
+    }
+    span::before {
+      content: '/';
+      margin: 0 10px 0 5px;
+      color: #cccccc;
+    }
+  }
+  .fa.fa-pencil {
+    padding: 6px 9px;
+  }
+  .fa.fa-hand-o-up {
+    padding: 6px 9px 6px 7px;
+  }
+  .fa-file-o {
+    padding: 6px 10px;
+  }
+  .fa-user {
+    padding: 6px 10px;
+  }
+  .fa-file-text {
+    padding: 6px 10px;
+  }
+  .fa-map-marker {
+    padding: 6px 12px;
+  }
+  .fa-dollar {
+    padding: 6px 12px;
+  }
+  .fa-clock-o {
+    padding: 6px 8px;
+  }
+  .breadcrumb-wrapper {
+    position: absolute;
+    top: 23px;
+    right: 25px;
+    .label {
+      color: #999999;
+      text-transform: uppercase;
+      font-size: 11px;
+      font-weight: normal;
+      display: inline-block;
+    }
+  }
+  .breadcrumb {
+    background: none;
+    display: inline-block;
+    padding: 0;
+    li {
+      font-size: 12px;
+    }
+    li.active {
+      color: #333333;
+    }
+  }
+}
+
+.contentpanel {
+  padding: 20px;
+  position: relative;
+}
+
+.contentpanel::after {
+  clear: both;
+  display: block;
+  content: '';
+}
+
+form .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.row-pad-5 {
+  margin-left: -5px;
+  margin-right: -5px;
+  [class*="col-lg"], [class*="col-md"], [class*="col-sm"] {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 10px;
+  }
+}
+
+.subtitle {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #333333;
+  font-family: @font-family-bold;
+  margin-bottom: 15px;
+  margin-top: 0;
+}
+
+.subtitle-lined {
+  border-bottom: 1px dotted #dddddd;
+  padding-bottom: 5px;
+}
+
+p {
+  margin-bottom: 10px;
+}
