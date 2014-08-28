@@ -14,13 +14,19 @@
     "express": "^4.8.5",
     "express-session": "^1.7.6",
     "foldify": "^0.5.13",
+    "list-directory-contents": "0.0.3",
     "lodash-node": "^2.4.1",
     "morgan": "^1.2.3",
+    "node-require-directory": "^1.0.2",
     "passport": "*",
     "passport-local": "*",
     "pwd": "0.0.4",
+    "recursive-readdir": "^1.2.0",
     "require-dir": "^0.1.0",
+    "require-directory": "^2.0.0",
     "static-favicon": "^1.0.2",
-    "underscore": "^1.6.0"
+    "tree-json": "0.0.1",
+    "underscore": "^1.6.0",
+    "universe": "0.0.2"
   }
 }

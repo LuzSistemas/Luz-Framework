@@ -104,7 +104,7 @@ module.exports = {
                  * Check if page has been changed.
                  */
                 var url = currentPage.breadCrumb[currentPage.breadCrumb.length - 1].url;
-                if (url.substr(0, url.length - 1) == req.url) {
+                if (url && url.substr(0, url.length - 1) == req.url) {
                     return cb(currentPage);
                 }
             }
@@ -120,8 +120,7 @@ module.exports = {
                 /**
                  * Fix for pages with missing info.
                  */
-                if (_.isUndefined(currentPage[tUrl]))
-                {
+                if (_.isUndefined(currentPage[tUrl])) {
                     currentPage[tUrl] = {};
                 }
                 currentPage = currentPage[tUrl];
@@ -130,7 +129,7 @@ module.exports = {
                     breadCrumb.push({
                         title: currentPage.title,
                         url: currUrl
-                        });
+                    });
                 } else if (currentPage.hasOwnProperty('menuItem')) {
                     breadCrumb.push({
                         title: currentPage.menuItem.title
@@ -148,18 +147,36 @@ module.exports = {
             return cb(currentPage);
         }
     },
-    setProperty: function (obj, path, value)
-    {
+    setProperty: function (obj, path, value) {
         var tObj = obj;
         var paths = path.split('.');
-        for (i = 0; i < paths.length - 1; i++)
-        {
-            if (_.isUndefined(tObj[paths[i]]))
-            {
+        for (i = 0; i < paths.length - 1; i++) {
+            if (_.isUndefined(tObj[paths[i]])) {
                 tObj[paths[i]] = {}
             }
             tObj = tObj[paths[i]];
         }
         tObj[paths[paths.length - 1]] = value;
+    },
+    getProperty: function (obj, path, cb) {
+        var tObj = obj;
+        var paths = path.split('.');
+        for (i = 0; i < paths.length - 1; i++) {
+            if (_.isUndefined(tObj[paths[i]])) {
+                if (cb) {
+                    return cb(undefined);
+                }
+                return undefined;
+            }
+            tObj = tObj[paths[i]];
+        }
+        if (cb) {
+            return cb(tObj[paths[paths.length - 1]]);
+        }
+
+        return tObj[paths[paths.length - 1]];
+    },
+    endsWith: function (str, suffix) {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
     }
 };

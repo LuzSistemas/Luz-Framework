@@ -10,7 +10,7 @@ var novaPessoaController = {
         action: function(req, res) {
             debugger;
             var entidadesBig = require('../../bigJsEntities');
-            entidadesBig.Pessoa.find({}, function(err, pessoas) {
+            entidadesBig.system.User.find({}, function(err, pessoas) {
                 res.render('index', {
                     teste: pessoas
                 });

@@ -15,6 +15,22 @@ var commonStrings = require('./commonStrings');
 var luzUtil = require('./LuzUtil');
 var luzAuth = require('./LuzAuth');
 var userPermissions = require("./UserPermissions");
+var ls = require('list-directory-contents');
+var config = require("./config");
+
+
+ls('../views', function (err, tree) {
+    var views = {};
+    for (var i in tree)
+    {
+        if (!luzUtil.endsWith(tree[i], "/"))
+        {
+            luzUtil.setProperty(views, tree[i].replace('..\\views\\', '').split('.')[0].replace(/\\/g,'.'), true);
+        }
+    }
+    debugger;
+    global.views = views;
+});
 
 /**
  * Setup authentication using Passport.
@@ -61,7 +77,32 @@ app.use(function (req, res, next) {
     luzUtil.getCurrentPage(req, function (currentPage) {
         // override view rendering logic
         res.render = function (view, options, fn) {
-            // do some custom logic
+
+            /**
+             * Checks if:
+             * - There's a base layout defined for the active template
+             * - There's not a specific layout already defined
+             * If both apply, replace default layout with the one from the active template.
+             */
+
+            if (global.views.templates[config.activeTemplate].layout && options && !options.layout)
+            {
+                _.merge(options,
+                    {
+                        layout: "templates/" + config.activeTemplate + "/layout"
+                    });
+            }
+            /**
+             * Checks if this view exists within the active template.
+             */
+            if (luzUtil.getProperty(global.views.templates[config.activeTemplate], view.replace(/\\/g, '.')))
+            {
+                debugger;
+                /**
+                 * If it does, replaces the default view with the template one.
+                 */
+                view = "templates/" + config.activeTemplate + "/" + view;
+            }
             _.merge(options,
                 {
                     currentPage: currentPage
