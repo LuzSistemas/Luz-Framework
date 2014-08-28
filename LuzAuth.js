@@ -1,7 +1,7 @@
 /**
  * Created by Pedro Luz on 24/08/2014.
  */
-var entidadesBig = require('./bigJsEntities');
+var entidadesBig = require('./models');
 var commonStrings = require('./commonStrings');
 var luzUtil = require('./LuzUtil');
 var LocalStrategy = require('passport-local').Strategy;

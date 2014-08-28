@@ -11,4 +11,7 @@ var pessoaSchema = {
     dataNascimento: {type: Date}
 };
 
-module.exports = {key: "Pessoa", schema: pessoaSchema};
+module.exports = {
+    key: "Pessoa",
+    schema: pessoaSchema
+};

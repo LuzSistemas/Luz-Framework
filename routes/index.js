@@ -1,5 +1,5 @@
 /* GET home page. */
-var entidadesBig = require('../bigJsEntities');
+var entidadesBig = require('../models');
 var indexController = {
     get: {
         auth: require("../LuzUtil").allowAnonymous,
