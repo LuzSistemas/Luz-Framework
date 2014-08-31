@@ -10,5 +10,6 @@ module.exports = {
     notRegistered: "Não registrado",
     loginIntoAccount: 'Faça seu login',
     forgotPassword: 'Esqueci minha senha',
+    login: "Logar",
     here: "Aqui"
 }
