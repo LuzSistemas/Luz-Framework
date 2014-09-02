@@ -9,6 +9,8 @@ var novaPessoaController = {
         }],
         action: function(req, res) {
             debugger;
+            res.render('pessoa/nova');
+            return;
             var models = require('../../models');
             models.system.User.find({}, function(err, pessoas) {
                 res.render('index', {

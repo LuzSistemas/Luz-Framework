@@ -70,7 +70,6 @@ app.use(function (req, res, next) {
     //Grab render function reference
 
     var _render = res.render;
-
     /**
      * Gets current page object and continues the common view rendering behavior
      */
@@ -85,7 +84,12 @@ app.use(function (req, res, next) {
              * If both apply, replace default layout with the one from the active template.
              */
 
-            if (global.views.templates[config.activeTemplate].layout && options && !options.layout)
+            if (!options)
+            {
+                options = {};
+            }
+
+            if (global.views.templates[config.activeTemplate].layout && !options.layout)
             {
                 _.merge(options,
                     {

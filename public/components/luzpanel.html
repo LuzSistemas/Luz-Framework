@@ -1,0 +1,14 @@
+<div id="{{panelId}}" class="panel panel-default">
+    <div class="panel-heading">
+        <div ng-show="panels.{{panelId}}.canclose == 'true' || panels[panelId].canminimize == 'true'" class="panel-btns">
+            <a ng-show="panels.{{panelId}}.canclose == 'true'" href="" class="panel-close">&times;</a>
+            <a ng-show="panels.{{panelId}}.canminimize == 'true'" href="" class="minimize">&minus;</a>
+        </div>
+        <h4 class="panel-title">{{panels[panelId].title}}</h4>
+        <p ng-show="description">{{panels[panelId].description}}</p>
+    </div>
+    <div class="panel-body" ng-show="!panels.{{panelId}}.isMinimized || panels.{{panelId}}.isMinimized == false" cs-transclude="body">
+    </div>
+    <div class="panel-footer" ng-show="panels.{{panelId}}.hasFooter" cs-transclude="footer">
+    </div>
+</div><!-- panel -->
