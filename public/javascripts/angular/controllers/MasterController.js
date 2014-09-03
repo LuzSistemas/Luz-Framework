@@ -1,32 +1,64 @@
 /**
  * Created by Pedro Luz on 23/08/2014.
  */
+
+
+window.BigJS.filter("sanitize", ['$sce', function($sce) {
+    return function(htmlCode){
+        return $sce.trustAsHtml(htmlCode);
+    }
+}]);
+
 //Diretiva da classe validate para validação client-side.
 window.BigJS.controller('MasterController', ['$scope', '$http', function ($scope, $http) {
-    $scope.inputs =  {};
+
+    /*
+     Declaring inputs
+     */
+    $scope.inputs = {};
+
+    /*
+     Declaring panels
+     */
     $scope.panels = {};
 
-    $scope.insertInput = function (input)
-    {
+
+    /*
+     Insert new input function
+     */
+    $scope.insertInput = function (input) {
         $scope.inputs[input.id] = input;
     };
 
-    $scope.insertPanel = function (panel)
-    {
+
+    /*
+     Insert new panel function
+     */
+    $scope.insertPanel = function (panel) {
         $scope.panels[panel.id] = panel;
     };
 
+    /*
+     Setting current page from window variable (JSON rendered through EJS directly on page)
+     */
     $scope.currentPage = window.currentPage;
+
+    /*
+     Checks if common strings is cached in a cookie, if not, retrieve it.
+     TODO: Check if has changed also.
+     */
     var cookieCommonStrings = $.cookie("commonStrings");
     if (!cookieCommonStrings) {
-        debugger;
         $http.get('/api/commonStrings')
             .success(function (data) {
+                /*
+                 Caches common string a cookie that expires in 3 days.
+                 */
                 $.cookie('commonStrings', JSON.stringify(data), {expires: 3, path: '/'});
                 $scope.strings = data;
             })
             .error(function (err) {
-                console.log('Error: ' + err);
+                console.log('Error retrieving common strings from server: ' + err);
             });
     }
     else {
@@ -36,23 +68,54 @@ window.BigJS.controller('MasterController', ['$scope', '$http', function ($scope
 
 window.BigJS.directive('luzinput', function ($compile) {
     return {
+        require: ["ngModel"],
         scope: true,
         restrict: 'E',
-        link: function(scope, elm, attrs)
-        {
+        link: function (scope, elm, attrs, c) {
             var inputScope = {
                 id: attrs.id,
                 attributes: attrs,
+                angularForm: c,
                 label: {
                     text: attrs.labelText,
                     gridSize: attrs.labelGridSize
                 },
                 input: {
                     gridSize: attrs.inputGridSize,
-                    html: 'teste'
+                    html: null
                 },
                 validation: {}
             };
+
+            /*
+            Setting name attribute
+             */
+            if (!attrs.name || attrs.name != attrs.id)
+            {
+                attrs.name = attrs.id;
+            }
+
+            /*
+            Generate input information (html, label, validation.. etc)
+             */
+            generateInput($compile, scope, elm, attrs, inputScope);
+
+            /*
+             Defaulting values
+             */
+            if (!inputScope.input.gridSize && !inputScope.label.gridSize) {
+                inputScope.label.gridSize = 3;
+                inputScope.input.gridSize = 9;
+            }
+            else {
+                if (!inputScope.input.gridSize) {
+                    inputScope.label.gridSize = (12 - inputScope.input.gridSize);
+                }
+
+                if (!inputScope.label.gridSize) {
+                    inputScope.input.gridSize = (12 - inputScope.label.gridSize);
+                }
+            }
 
             scope.inputId = attrs.id;
             scope.insertInput(inputScope);
@@ -86,8 +149,7 @@ window.BigJS.directive('luzpanel', function ($compile) {
                 $scope.widgetTranscludes.push(widgetTransclude);
             };
         },
-        link: function(scope, elm, attrs)
-        {
+        link: function (scope, elm, attrs) {
             attrs.hasFooter = (elm[0].innerHTML.indexOf("<!-- csSection: footer -->") > 0);
             scope.panelId = attrs.id;
             scope.insertPanel(attrs);
@@ -100,22 +162,22 @@ window.BigJS.directive('luzpanel', function ($compile) {
 });
 
 window.BigJS.directive('csSection', function () {
-        return {
-            scope: true,
-            transclude: 'element',
-            priority: 100,
-            require: '^luzpanel',
-            link: function (scope, element, attrs, ctrl, $transclude) {
-                var directiveTransclude = {
-                    id: attrs.csSection,
-                    transclude: $transclude,
-                    element: element
-                };
+    return {
+        scope: true,
+        transclude: 'element',
+        priority: 100,
+        require: '^luzpanel',
+        link: function (scope, element, attrs, ctrl, $transclude) {
+            var directiveTransclude = {
+                id: attrs.csSection,
+                transclude: $transclude,
+                element: element
+            };
 
-                ctrl.registerTransclude(directiveTransclude);
-            }
-        };
-    })
+            ctrl.registerTransclude(directiveTransclude);
+        }
+    };
+})
     // directive to capture "cs-widget" content
     .directive('csWidget', function () {
         return {
@@ -163,3 +225,85 @@ window.BigJS.directive('csSection', function () {
             }
         };
     });
+
+function generateInput($compile, scope, elm, attrs, inputScope) {
+    var htmlInput;
+    var inputType = attrs.type;
+
+    /*
+     Choosing input type and defining tag name
+     */
+    if (!inputType) {
+        htmlInput = "<input ";
+    }
+    else {
+        switch (inputType) {
+            case "textarea":
+                htmlInput = "<textarea ";
+                break;
+            default:
+                htmlInput = "<input ";
+                break;
+        }
+    }
+
+    /*
+     Checking and appending attributes
+     */
+
+    var hasValidation = false;
+    var elmAttributes = elm[0].attributes;
+    for (var a in elmAttributes) {
+
+        var attr = elmAttributes[a];
+        //Ignore attributes without name?
+        if (!attr.name)
+        {
+            continue;
+        }
+        //Ignoring internal Angular variables.
+        if (attr.name.indexOf("$") == 0)
+        {
+            continue;
+        }
+        //If it's a validation attribute
+        if (attr.name.indexOf("luz-validation-") > 0)
+        {
+            hasValidation = true;
+            //Append to input object in inputScope.
+            inputScope.validation[attr.name.replace("luz-validation-").toLowerCase()] = attr.value;
+        }
+
+        //Append the attribute and it's value to the input HTML
+        htmlInput += attr.name + "=\"" + attr.value + "\" ";
+    }
+
+    //Closes tag
+    htmlInput += "/>";
+
+    $("label:first", elm).after(angular.element(htmlInput))
+    $compile(elm.contents())(scope);
+
+    //If this control has validation and has a model defined, attach a validator
+    if (hasValidation && attrs.ngModel && attrs.id)
+    {
+        scope.$watch(attrs.ngModel, function (newValue, oldValue, scope) {
+            validateInput(attrs.id, newValue, oldValue, scope);
+        });
+    }
+}
+
+function validateInput(id, newValue, oldValue, scope)
+{
+    var targetInput = scope.inputs[id];
+    for (var v in targetInput.validation)
+    {
+        switch (v.toLowerCase())
+        {
+            case "required":
+                break;
+            case "required":
+                break;
+        }
+    }
+}

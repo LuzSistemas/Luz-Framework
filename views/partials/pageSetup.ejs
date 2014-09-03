@@ -1,4 +1,4 @@
 <script>
-    window.BigJS = angular.module('BigJS',[]);
+    window.BigJS = angular.module('BigJS', ['ngSanitize']);
     window.currentPage = JSON.parse('<%- JSON.stringify(currentPage) %>');
 </script>
