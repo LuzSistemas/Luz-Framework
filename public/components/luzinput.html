@@ -1,6 +1,6 @@
 <div class="form-group" ng-class="{ 'has-error': inputs[inputId].validation.errors }">
     <label class="col-sm-{{inputs[inputId].label.gridSize}} control-label">{{inputs[inputId].label.text}} <span ng-if="inputs[inputId].validation.required == true" class="asterisk">*</span></label>
-    <div class="col-sm-{{inputs[inputId].input.gridSize}}">
+    <div class="inputHolder col-sm-{{inputs[inputId].input.gridSize}}">
         <label ng-show="inputs[inputId].validation.errors" for="{{inputId}}" class="error">{{inputs[inputId].validation.errors[0].message}}</label>
     </div>
 </div>

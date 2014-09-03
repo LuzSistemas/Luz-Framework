@@ -68,14 +68,16 @@ window.BigJS.controller('MasterController', ['$scope', '$http', function ($scope
 
 window.BigJS.directive('luzinput', function ($compile) {
     return {
-        require: ["ngModel"],
+        require: ["^form"],
         scope: true,
         restrict: 'E',
         link: function (scope, elm, attrs, c) {
+
             var inputScope = {
                 id: attrs.id,
                 attributes: attrs,
-                angularForm: c,
+                parentFormController: null,
+                formController: null,
                 label: {
                     text: attrs.labelText,
                     gridSize: attrs.labelGridSize
@@ -92,13 +94,13 @@ window.BigJS.directive('luzinput', function ($compile) {
              */
             if (!attrs.name || attrs.name != attrs.id)
             {
-                attrs.name = attrs.id;
+                $(elm).attr("name", attrs.id);
             }
 
             /*
             Generate input information (html, label, validation.. etc)
              */
-            generateInput($compile, scope, elm, attrs, inputScope);
+            generateInput($compile, scope, elm, attrs, inputScope, c);
 
             /*
              Defaulting values
@@ -226,7 +228,7 @@ window.BigJS.directive('csSection', function () {
         };
     });
 
-function generateInput($compile, scope, elm, attrs, inputScope) {
+function generateInput($compile, scope, elm, attrs, inputScope, c) {
     var htmlInput;
     var inputType = attrs.type;
 
@@ -267,11 +269,19 @@ function generateInput($compile, scope, elm, attrs, inputScope) {
             continue;
         }
         //If it's a validation attribute
-        if (attr.name.indexOf("luz-validation-") > 0)
+        if (attr.name.indexOf("luz-validation-") == 0)
         {
             hasValidation = true;
             //Append to input object in inputScope.
             inputScope.validation[attr.name.replace("luz-validation-").toLowerCase()] = attr.value;
+
+            switch (attr.name.replace("luz-validation-",""))
+            {
+                case "required":
+                    htmlInput += "ng-required=\"true\"";
+                    continue;
+                    break;
+            }
         }
 
         //Append the attribute and it's value to the input HTML
@@ -281,29 +291,23 @@ function generateInput($compile, scope, elm, attrs, inputScope) {
     //Closes tag
     htmlInput += "/>";
 
-    $("label:first", elm).after(angular.element(htmlInput))
+    htmlInput = $(htmlInput).addClass("form-control")[0].outerHTML;
+
+    $(".inputHolder:first", elm).html(angular.element(htmlInput))
     $compile(elm.contents())(scope);
+
+    inputScope.parentFormController = c[0];
+    inputScope.formController = scope[c[0].$name][attrs.id];
 
     //If this control has validation and has a model defined, attach a validator
     if (hasValidation && attrs.ngModel && attrs.id)
     {
         scope.$watch(attrs.ngModel, function (newValue, oldValue, scope) {
-            validateInput(attrs.id, newValue, oldValue, scope);
+            var targetInput = scope.inputs[attrs.id];
+            if (targetInput.formController.$invalid)
+            {
+                alert('opa');
+            }
         });
-    }
-}
-
-function validateInput(id, newValue, oldValue, scope)
-{
-    var targetInput = scope.inputs[id];
-    for (var v in targetInput.validation)
-    {
-        switch (v.toLowerCase())
-        {
-            case "required":
-                break;
-            case "required":
-                break;
-        }
     }
 }
