@@ -1,17 +1,14 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <form id="frmNovaPessoa" name="frmNovaPessoa" class="form-horizontal">
-            <div ng-form="OutraPessoa">
-                <luzpanel id="pnlTeste" title="Cadastrar nova pessoa" description="Painel de exemplo para demonstração do componente via AngularJS" canclose="true" canminimize="true">
-                    <div cs-section="body">
-                        <luzinput type="text" id="inputTeste" ng-model="panels.pnlTeste.title" label-text="titulo label" label-grid-size="3" input-grid-size="9" luz-validation-required="true" />
-                        <input type="text" ng-model="panels.pnlTeste.title"/>
-                    </div>
-                    <div cs-section="footer">
-                        Teste footer.
-                    </div>
-                </luzpanel>
-            </div>
+            <luzpanel id="pnlTeste" title="Teste" description="Painel de exemplo para demonstração do componente via AngularJS" canclose="true" canminimize="true">
+                <div cs-section="body">
+                    <luzinput type="text" id="inputTeste" ng-model="panels.pnlTeste.title" label-text="Título teste qualquer" label-grid-size="6" input-grid-size="6" luz-validation-required="true" />
+                </div>
+                <div cs-section="footer">
+                    Teste footer.
+                </div>
+            </luzpanel>
         </form>
     </div>
     <!-- col-md-6 -->

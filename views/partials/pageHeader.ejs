@@ -2,7 +2,7 @@
     <h2><i class="fa {{currentPage.header.icon}}"></i> {{currentPage.header.title}}
         <span><%= currentPage.header.description %></span></h2>
 
-    <div class="breadcrumb-wrapper">Você está aqui:</span>
+    <div class="breadcrumb-wrapper">{{strings.youAreHere}}:</span>
         <ol class="breadcrumb">
             <li class="{{b.active ? 'active' : ''}}" ng-repeat="b in currentPage.breadCrumb" ng-switch on="b.url">
                 <a ng-switch-when="b.url" href="{{b.url}}">{{b.title}}</a>

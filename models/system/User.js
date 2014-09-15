@@ -3,16 +3,21 @@
  */
 var luzUtil = require('../../LuzUtil');
 var pessoa = require("../Pessoa");
+var mongoose = require('mongoose');
+var userGroup = require ('./UserGroup');
 var _ = require('lodash-node')
 /**
  * User schema definition based on Mongoose standards.
  */
 var userSchema = {
+    email: {type: String, required: true, lowercase: true},
     username: {type: String, required: true, lowercase: true, index: {unique: true}},
     password: {type: String, required: true},
-    email: {type: String, required: true, lowercase: true},
+    salt: {type: String, default: 'defaultHash', required: true},
     superAdmin: {type: Boolean, default: false},
-    salt: {type: String, default: 'defaultHash', required: true}
+    individualPermissions: [String],
+    deniedPermissions: [String],
+    groups: [{ type: mongoose.Schema.Types.ObjectId, ref: userGroup.key }]
 };
 
 /**
@@ -22,6 +27,7 @@ _.merge(userSchema, pessoa.schema);
 
 
 var schemaSetup = function (schema){
+
     /**
      * Static helper method for retrieving an user by it's username.
      * @param username A given username.
@@ -31,6 +37,15 @@ var schemaSetup = function (schema){
         this.findOne({username: username}, function (err, user) {
             return cb(err, user);
         });
+    };
+
+    /**
+     * Static helper method for retrieving an user by it's username.
+     * @param username A given username.
+     * @param cb A callback function(err, result)
+     */
+    schema.methods.getPermissions = function () {
+        //TODO: Return all permissions reflecting individual ones and groups
     };
 
     /**

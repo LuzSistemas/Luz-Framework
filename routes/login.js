@@ -36,27 +36,29 @@ var loginController = {
 var loginPage =
 {
     controller: loginController,
-    allowSignup: false,
-    title: 'Big JS - Login',
-    systemTitle: 'BigJS',
-    loginTitle: 'BigJS',
-    welcomeText: 'Bem vindo ao BigJS beta!',
-    footer: {
-        left: {
-            text: "© 2014. Todos os direitos reservados. Sistema BigJS"
-        },
-        right: {
-            text: "Criado pela: ",
-            link: {
-                url: "http://www.luzsistemas.com.br",
-                text: "Luz Sistemas"
+    page: {
+        allowSignup: false,
+        title: 'Big JS - Login',
+        systemTitle: 'BigJS',
+        loginTitle: 'BigJS',
+        welcomeText: 'Bem vindo ao BigJS beta!',
+        footer: {
+            left: {
+                text: "© 2014. Todos os direitos reservados. Sistema BigJS"
+            },
+            right: {
+                text: "Criado pela: ",
+                link: {
+                    url: "http://www.luzsistemas.com.br",
+                    text: "Luz Sistemas"
+                }
             }
-        }
-    },
-    topics: [
-        {icon: 'fa-cogs', text: 'Ainda em desenvolvimento'},
-        {icon: 'fa-eye', text: 'Dados fictícios'},
-        {icon: 'fa-flash', text: 'Desenvolvimento a jato com JS!'},
-    ]
+        },
+        topics: [
+            {icon: 'fa-cogs', text: 'Ainda em desenvolvimento'},
+            {icon: 'fa-eye', text: 'Dados fictícios'},
+            {icon: 'fa-flash', text: 'Desenvolvimento a jato com JS!'},
+        ]
+    }
 };
 module.exports = loginPage;

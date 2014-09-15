@@ -20,14 +20,15 @@
         </ul>
     </div>
 
-    <h5 class="sidebartitle">Navegação</h5>
+    <h5 ng-show="strings.navigation" class="sidebartitle">{{strings.navigation}}</h5>
     <ul class="nav nav-pills nav-stacked nav-bracket">
         <li ng-repeat="menuItem in menuItems" class="{{menuItem.subItems.length > 0 ? 'nav-parent' : null}}">
             <a href="{{menuItem.url}}"><i class="fa {{menuItem.icon}}"></i><span>{{menuItem.title}}</span></a>
             <ul class="children" ng-if="menuItem.subItems.length > 0">
                 <li ng-repeat="subMenuItem in menuItem.subItems">
-                    <a href="{{subMenuItem.url}}"><i
-                                class="fa {{subMenuItem.icon}}"></i><span>{{subMenuItem.title}}</span></a>
+                    <a href="{{subMenuItem.url}}">
+                        <i class="fa {{subMenuItem.icon}}"></i><span>{{subMenuItem.title}}</span>
+                    </a>
                 </li>
             </ul>
         </li>

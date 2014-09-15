@@ -47,7 +47,7 @@ window.BigJS.controller('MasterController', ['$scope', '$http', function ($scope
      Checks if common strings is cached in a cookie, if not, retrieve it.
      TODO: Check if has changed also.
      */
-    var cookieCommonStrings = $.cookie("commonStrings");
+    var cookieCommonStrings = null;//$.cookie("commonStrings"); TEMPORARY!!!!
     if (!cookieCommonStrings) {
         $http.get('/api/commonStrings')
             .success(function (data) {

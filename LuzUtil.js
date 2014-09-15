@@ -28,14 +28,18 @@ module.exports = {
      * @returns {*}
      */
     checkAuth: function (req, res, next) {
-        debugger;
+        //Checks if there's an user logged
         if (req.isAuthenticated()) {
             var currentPage = req.session.currentPage;
             var tMethod = req.method.toLowerCase();
             var user = req.user;
+
+            //If user is superAdmin, clear!
             if (user.superAdmin) {
                 return next();
             }
+
+            //Checks if the current action needs specific permissions.
             if (currentPage && currentPage.controller[tMethod] && !_.isEmpty(currentPage.controller[tMethod].necessaryPermissions)) {
                 var necessaryPermissions = currentPage.controller[tMethod].necessaryPermissions;
                 for (var p in necessaryPermissions) {
@@ -43,13 +47,18 @@ module.exports = {
                         /**
                          * Missing permission for this page!
                          */
+                        //TODO: Missing permissions page!
                         res.redirect('/login')
                     }
                 }
             }
+            /*
+            Ok! Authorized!
+             */
             return next();
-            //TODO: Verify custom user roles and permissions.
         }
+
+        //You shall not pass!
         res.redirect('/login')
     },
 
@@ -86,11 +95,19 @@ module.exports = {
      * @param cb The callback for getting this result: function(currentPage)
      */
     getCurrentPage: function (req, cb) {
-        /**
-         * Gets current page from session.
-         * @type {*|currentPage|$scope.currentPage}
-         */
 
+        /*
+        Igore API requests (that doesn't need a currentPage variable!)
+         */
+        if (req.url.indexOf('/api') >= 0)
+        {
+            if (cb)
+            {
+                return cb(null);
+            }
+
+            return null;
+        }
         var urlRoutes = req.url.split('/');
         /**
          * Checks if the last route url is a file, if it is, ignore the current page logic for this request.
@@ -115,6 +132,7 @@ module.exports = {
                 urlPath = ['index'];
             }
             var currUrl = "/";
+            var counter = 1;
             for (var r in urlPath) {
                 var tUrl = urlPath[r] === '/' ? 'index' : urlPath[r];
                 /**
@@ -123,7 +141,7 @@ module.exports = {
                 if (_.isUndefined(currentPage[tUrl])) {
                     currentPage[tUrl] = {};
                 }
-                currentPage = currentPage[tUrl];
+                currentPage = counter == urlPath.length ? currentPage[tUrl].page : currentPage[tUrl];
                 currUrl += urlPath[r] + "/";
                 if (currentPage.hasOwnProperty('title')) {
                     breadCrumb.push({
@@ -139,6 +157,7 @@ module.exports = {
                         title: urlPath[r]
                     });
                 }
+                counter++;
             }
             breadCrumb[breadCrumb.length - 1].active = true;
             currentPage.breadCrumb = breadCrumb;

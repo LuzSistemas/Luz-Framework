@@ -17,7 +17,9 @@ var luzAuth = require('./LuzAuth');
 var userPermissions = require("./UserPermissions");
 var ls = require('list-directory-contents');
 var config = require("./config");
+var multer  = require('multer');
 
+var serverStartupDate = new Date();
 
 ls('../views', function (err, tree) {
     var views = {};
@@ -28,7 +30,6 @@ ls('../views', function (err, tree) {
             luzUtil.setProperty(views, tree[i].replace('..\\views\\', '').split('.')[0].replace(/\\/g,'.'), true);
         }
     }
-    debugger;
     global.views = views;
 });
 
@@ -51,6 +52,7 @@ app.use(favicon("./public/brackets/images/favicon.png"));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+app.use(multer({ dest: './uploads/'}))
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressLayouts);
@@ -101,7 +103,6 @@ app.use(function (req, res, next) {
              */
             if (luzUtil.getProperty(global.views.templates[config.activeTemplate], view.replace(/\\/g, '.')))
             {
-                debugger;
                 /**
                  * If it does, replaces the default view with the template one.
                  */
@@ -124,16 +125,15 @@ app.use(function (req, res, next) {
 var pages = requireDir('./routes', { recurse: true });
 global.pages = pages;
 var menuItems = [];
+
 setupPages(pages, "/", function (router, extractedPermissions) {
     app.use(router);
     _.forEach(extractedPermissions, function(newPermission) {
         /**
-         * Ingore permissions with the same key.
+         * Ignore permissions with the same key.
          */
         if (_.isUndefined(userPermissions[newPermission.key]))
         {
-            var key = newPermission.key;
-            delete newPermission.key;
             userPermissions[key] = newPermission;
         }
     });
@@ -189,9 +189,13 @@ function setupPages(pages, parentUrl, cb, router) {
         {
             var tUrl = parentUrl + (r === 'index' ? '' : r);
             for (var m in pages[r].controller) {
+                //Checks if there's a specific authentication method, if not, use system's default
                 var userAuthenticationStrategy = pages[r].controller[m].auth ? pages[r].controller[m].auth : luzUtil.checkAuth;
+
+                //Checks if there any necessary permissions for accessing this action
                 if (pages[r].controller[m].action.necessaryPermissions)
                 {
+                    //Append new user permissions
                     userPermissions = userPermissions.concat(pages[r].controller[m].action.necessaryPermissions);
                 }
                 router[m](tUrl, userAuthenticationStrategy, pages[r].controller[m].action)
@@ -221,7 +225,7 @@ function setupPages(pages, parentUrl, cb, router) {
 app.use('/api/menuItems', function (req, res) {
     //TODO: Filter menu items per user permissions and roles!!
 
-    res.send(menuItems);
+    res.send({lastUpdate: serverStartupDate, menuItems: menuItems});
 });
 
 /**

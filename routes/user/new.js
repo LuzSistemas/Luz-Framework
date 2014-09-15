@@ -3,14 +3,11 @@ var strings = require("../../commonStrings");
 var novaPessoaController = {
     get: {
         necessaryPermissions: [{
-            key: 'viewDashboard',
-            title: strings.viewDashboard,
-            description: "Permission for viewing the dashboard page."
+            key: 'createUser',
+            title: strings.createUser,
+            description: "Permissão para criar novos usuários no sistema."
         }],
         action: function(req, res) {
-            debugger;
-            res.render('pessoa/nova');
-            return;
             var models = require('../../models');
             models.system.User.find({}, function(err, pessoas) {
                 res.render('index', {
@@ -23,16 +20,16 @@ var novaPessoaController = {
 
 module.exports = {
     controller: novaPessoaController,
+    menuItem: {
+        title: 'Novo',
+        icon: 'fa-plus'
+    },
     page: {
-        title: 'Nova pessoa',
+        title: 'Novo usuário',
         header: {
-            title: 'Criar nova pessoa',
-            description: 'Tela para criação de novas pessoas',
+            title: 'Criar novo usuário',
+            description: 'Criação de um novo usuário para o sistema',
             icon: 'fa-user'
-        },
-        menuItem: {
-            title: 'Nova',
-            icon: 'fa-plus'
         }
     }
 };

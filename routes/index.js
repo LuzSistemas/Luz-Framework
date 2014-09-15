@@ -1,30 +1,44 @@
 /* GET home page. */
 var entidadesBig = require('../models');
+var util = require('util');
+var fs = require('fs');
+var uuid = require('node-uuid');
+var luzUtil = require("../LuzUtil");
+
+
 var indexController = {
     get: {
-        auth: require("../LuzUtil").allowAnonymous,
+        auth: luzUtil.allowAnonymous,
         action: function(req, res) {
-
-            //    res.render("layout", {});
-            //    return;
-            //    entidadesBig.Pessoa.update(req.query, {$set: {cpf: '999.999.999-99'}}, {multi: true}, function (e, i){
-            //        entidadesBig.Pessoa.find(req.query, function(err, pessoas)
-            //        {
-            //            res.send({erros:err, registrosAfetados: i, pessoas: pessoas});
-            //        });
-            //    });
-            var novaPessoa = new entidadesBig.system.User(req.query);
-            novaPessoa.save(function(err) {
-                if (err) return console.log(err);
-                // saved!
-                entidadesBig.system.User.find({}, function(err, pessoas) {
-                    res.render('index', {
-                        teste: pessoas
-                    });
-                });
+            var outputFilename = './GET-' + uuid.v1() + ".json";
+            var myData = util.inspect(req.query, { showHidden: true, depth: 3 });
+            fs.writeFile(outputFilename, JSON.stringify(myData, null, 4), function(err) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    console.log("JSON saved to " + outputFilename);
+                }
             });
+            res.send(200);
+        }
+    },
+    post: {
+        auth: luzUtil.allowAnonymous,
+        action: function(req, res) {
+            var outputFilename = './GET-' + uuid.v1() + ".json";
+            var myData = util.inspect(req.body, { showHidden: true, depth: 3 });
+            fs.writeFile(outputFilename, JSON.stringify(myData, null, 4), function(err) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    console.log("JSON saved to " + outputFilename);
+                }
+            });
+            res.send(200);
+
         }
     }
+
 };
 
 module.exports = {
