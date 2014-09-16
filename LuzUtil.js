@@ -70,7 +70,6 @@ module.exports = {
      * @returns {*}
      */
     allowAnonymous: function (req, res, next) {
-        debugger;
         return next();
     },
 
@@ -141,7 +140,14 @@ module.exports = {
                 if (_.isUndefined(currentPage[tUrl])) {
                     currentPage[tUrl] = {};
                 }
+
                 currentPage = counter == urlPath.length ? currentPage[tUrl].page : currentPage[tUrl];
+
+                if (!currentPage)
+                {
+                    currentPage = {};
+                }
+
                 currUrl += urlPath[r] + "/";
                 if (currentPage.hasOwnProperty('title')) {
                     breadCrumb.push({

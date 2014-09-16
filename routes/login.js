@@ -18,7 +18,6 @@ var loginController = {
         action: function (req, res, next) {
             passport.authenticate('local', function (err, user) {
                 if (err) {
-                    debugger;
                     return res.render('login', {currentPage: {error: err}, layout: 'standalone'});
                 }
                 req.logIn(user, function (err) {
