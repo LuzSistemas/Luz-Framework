@@ -18,6 +18,7 @@ var userPermissions = require("./UserPermissions");
 var ls = require('list-directory-contents');
 var config = require("./config");
 var multer  = require('multer');
+var os = require('os')
 
 var serverStartupDate = new Date();
 
@@ -27,7 +28,13 @@ ls('../views', function (err, tree) {
     {
         if (!luzUtil.endsWith(tree[i], "/"))
         {
-            luzUtil.setProperty(views, tree[i].replace('..\\views\\', '').split('.')[0].replace(/\\/g,'.'), true);
+            if (os.platform() == 'win32')
+            {
+                luzUtil.setProperty(views, tree[i].replace('..\\views\\', '').split('.')[0].replace(/\\/g,'.'), true);
+            }
+            else {
+                luzUtil.setProperty(views, tree[i].replace('../views/', '').split('.')[0].replace(new RegExp("/","g"), '.'), true);
+            }
         }
     }
     global.views = views;
