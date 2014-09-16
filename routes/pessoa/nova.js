@@ -8,7 +8,6 @@ var novaPessoaController = {
             description: "Permission for viewing the dashboard page."
         }],
         action: function(req, res) {
-            debugger;
             res.render('pessoa/nova');
             return;
             var models = require('../../models');
