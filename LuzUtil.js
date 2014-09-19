@@ -203,5 +203,27 @@ module.exports = {
     },
     endsWith: function (str, suffix) {
         return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    },
+    getValidationErrorMessage: function(input)
+    {
+
+    },
+    /*
+    Gets a string or boolean value based on a given string
+     */
+    getStringOrBoolean: function (str)
+    {
+        switch (str.toLowerCase())
+        {
+            case "true":
+                return true;
+                break;
+            case "false":
+                return false;
+                break;
+            default:
+                return str;
+                break;
+        }
     }
 };

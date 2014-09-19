@@ -66,66 +66,6 @@ window.BigJS.controller('MasterController', ['$scope', '$http', function ($scope
     }
 }]);
 
-window.BigJS.directive('luzinput', function ($compile) {
-    return {
-        require: ["^form"],
-        scope: true,
-        restrict: 'E',
-        link: function (scope, elm, attrs, c) {
-
-            var inputScope = {
-                id: attrs.id,
-                attributes: attrs,
-                parentFormController: null,
-                formController: null,
-                label: {
-                    text: attrs.labelText,
-                    gridSize: attrs.labelGridSize
-                },
-                input: {
-                    gridSize: attrs.inputGridSize,
-                    html: null
-                },
-                validation: {}
-            };
-
-            /*
-            Setting name attribute
-             */
-            if (!attrs.name || attrs.name != attrs.id)
-            {
-                $(elm).attr("name", attrs.id);
-            }
-
-            /*
-            Generate input information (html, label, validation.. etc)
-             */
-            generateInput($compile, scope, elm, attrs, inputScope, c);
-
-            /*
-             Defaulting values
-             */
-            if (!inputScope.input.gridSize && !inputScope.label.gridSize) {
-                inputScope.label.gridSize = 3;
-                inputScope.input.gridSize = 9;
-            }
-            else {
-                if (!inputScope.input.gridSize) {
-                    inputScope.label.gridSize = (12 - inputScope.input.gridSize);
-                }
-
-                if (!inputScope.label.gridSize) {
-                    inputScope.input.gridSize = (12 - inputScope.label.gridSize);
-                }
-            }
-
-            scope.inputId = attrs.id;
-            scope.insertInput(inputScope);
-        },
-        templateUrl: '/components/luzinput.html'
-    };
-});
-
 
 window.BigJS.directive('luzpanel', function ($compile) {
     return {
@@ -159,6 +99,67 @@ window.BigJS.directive('luzpanel', function ($compile) {
             var contentElement = angular.element(templateString);
             elm.append(contentElement);
             $compile(contentElement)(scope);
+        }
+    };
+});
+
+window.BigJS.directive('luzinput', function ($compile) {
+    return {
+        require: ["^form", "?^luzpanel"],
+        scope: true,
+        restrict: 'E',
+        templateUrl: '/components/luzinput.html',
+        link: {
+            post: function (scope, elm, attrs, c) {
+
+                var inputScope = {
+                    id: attrs.id,
+                    attributes: attrs,
+                    parentFormController: null,
+                    formController: null,
+                    label: {
+                        text: attrs.labelText,
+                        gridSize: attrs.labelGridSize
+                    },
+                    input: {
+                        gridSize: attrs.inputGridSize,
+                        html: null
+                    },
+                    validation: {}
+                };
+
+                /*
+                 Setting name attribute
+                 */
+                if (!attrs.name || attrs.name != attrs.id) {
+                    $(elm).attr("name", attrs.id);
+                }
+
+                /*
+                 Generate input information (html, label, validation.. etc)
+                 */
+                generateInput($compile, scope, elm, attrs, inputScope, c);
+
+                /*
+                 Defaulting grid size values
+                 */
+                if (!inputScope.input.gridSize && !inputScope.label.gridSize) {
+                    inputScope.label.gridSize = 3;
+                    inputScope.input.gridSize = 9;
+                }
+                else {
+                    if (!inputScope.input.gridSize) {
+                        inputScope.label.gridSize = (12 - inputScope.input.gridSize);
+                    }
+
+                    if (!inputScope.label.gridSize) {
+                        inputScope.input.gridSize = (12 - inputScope.label.gridSize);
+                    }
+                }
+
+                scope.inputId = attrs.id;
+                scope.insertInput(inputScope);
+            }
         }
     };
 });
@@ -268,17 +269,41 @@ function generateInput($compile, scope, elm, attrs, inputScope, c) {
         {
             continue;
         }
-        //If it's a validation attribute
-        if (attr.name.indexOf("luz-validation-") == 0)
+        //If it's a validation attribute (and not a message one)
+        if (attr.name.indexOf("luz-validation-") == 0 && attr.name.indexOf("-msg") == -1)
         {
             hasValidation = true;
-            //Append to input object in inputScope.
-            inputScope.validation[attr.name.replace("luz-validation-").toLowerCase()] = attr.value;
+
+            /*
+            Setting validation message or just bool
+             */
+
+            var cValidation = attr.name.replace("luz-validation-", "").toLowerCase();
+            var attrMsg = elmAttributes["luz-validation-" + cValidation + "-msg"];
+            var msg = "";
+
+            /*
+            Checks if there's a custom message for this validation error
+             */
+            if (attrMsg)
+            {
+                msg = attrMsg.value;
+            }
+            else
+            {
+                msg = "TODO: Default error messages"
+            }
+
+            inputScope.validation[cValidation] = {
+                value: getStringOrBoolean(attr.value),
+                message: msg
+            };
 
             switch (attr.name.replace("luz-validation-",""))
             {
                 case "required":
                     htmlInput += "ng-required=\"true\"";
+                    //Append to input object in inputScope.
                     continue;
                     break;
             }
@@ -293,21 +318,60 @@ function generateInput($compile, scope, elm, attrs, inputScope, c) {
 
     htmlInput = $(htmlInput).addClass("form-control")[0].outerHTML;
 
-    $(".inputHolder:first", elm).html(angular.element(htmlInput))
+    var angInput = angular.element(htmlInput);
+    $(".inputHolder:first", elm).prepend(angInput);
     $compile(elm.contents())(scope);
 
     inputScope.parentFormController = c[0];
     inputScope.formController = scope[c[0].$name][attrs.id];
+
+    /*
+    If this input has a parent panel, reference it
+     */
+    if (c[1])
+    {
+        inputScope.parentPanel = c[1];
+    }
 
     //If this control has validation and has a model defined, attach a validator
     if (hasValidation && attrs.ngModel && attrs.id)
     {
         scope.$watch(attrs.ngModel, function (newValue, oldValue, scope) {
             var targetInput = scope.inputs[attrs.id];
+            var validation = targetInput.validation ? targetInput.validation : {};
+
             if (targetInput.formController.$invalid)
             {
-                alert('opa');
+                validation.errors = [];
+                for (var e in targetInput.formController.$error)
+                {
+                    validation.errors.push({key: e, message: validation[e].message})
+                }
+            }
+            else
+            {
+                if (!validation.errors)
+                {
+                    return;
+                }
+                delete validation.errors;
             }
         });
+    }
+}
+
+function getStringOrBoolean(str)
+{
+    switch (str.toLowerCase())
+    {
+        case "true":
+            return true;
+            break;
+        case "false":
+            return false;
+            break;
+        default:
+            return str;
+            break;
     }
 }
