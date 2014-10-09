@@ -1,0 +1,236 @@
+.leftpanel {
+  width: 240px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  .searchform {
+    display: none;
+    input {
+      padding: 10px;
+      height: auto;
+      width: 100%;
+      margin: 5px 0 20px 0;
+      .border-radius(2px);
+    }
+  }
+  .searchform::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  .userlogged {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: none;
+    .media-object {
+      width: 40px;
+      .border-radius(100px);
+      float: left;
+      border: 2px solid #1caf9a;
+      padding: 2px;
+      margin-left: 2px;
+    }
+    .media-body {
+      margin-left: 50px;
+      color: #cccccc;
+      h4 {
+        font-size: 15px;
+        margin: 0;
+      }
+      span {
+        font-style: italic;
+        font-size: 11px;
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.sticky-leftpanel {
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.logopanel {
+  padding: 10px;
+  background: @white-color;
+  h1 {
+    font-size: 30px;
+    font-family:@font-family-bold;
+    letter-spacing: -1.5px;
+    color: @main-bg-color;
+    line-height: 30px;
+    margin: 0;
+    span {
+      color: @success-color;
+    }
+  }
+}
+
+.leftpanelinner {
+  padding: 5px 15px;
+}
+
+.sidebartitle {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #999999;
+  margin-bottom: 10px;
+}
+
+.nav-bracket {
+  margin-bottom: 30px;
+  > li {
+    > a:hover, > a:active, > a:focus {
+      background-color: @white-color;
+      color: @main-bg-color;
+      .box-shadow(0 3px 0,rgba(0,0,0,0.2));
+    }
+    > a {
+      color: #8f939e;
+      padding: 7px 10px;
+      > .badge {
+        margin-top: 2px;
+      }
+    }
+  }
+  > li.nav-parent {
+    > a:hover, > a:active {
+      color: @main-bg-color;
+      background-color: @white-color;
+      background-image: url(../images/plus.png);
+    }
+    > a {
+      background: transparent url(../images/plus-white.png) no-repeat 96% center;
+    }
+    > a:focus {
+      background-color: none;
+      color: #8f939e;
+      .noshadow;
+    }
+  }
+  > li.nav-active > a {
+    background-color: @white-color;
+    background-image: url(../images/minus.png);
+    color: @main-bg-color;
+    .box-shadow(0 3px 0, rgba(0,0,0,0.2));
+  }
+  > li.nav-active > a:hover {
+    background-image: url(../images/minus.png);
+    background-repeat: no-repeat;
+  }
+  > li.nav-active > a:focus {
+    color: @main-bg-color;
+  }
+  > li.active {
+    > a:hover, > a:focus {
+      background-color: @success-color;
+      color: @white-color;
+    }
+    > a {
+      background-color: @success-color;
+      color: @white-color;
+      .box-shadow(0 3px 0, rgba(0,0,0,0.2));
+    }
+  }
+  > li.nav-parent.active > a {
+    background-image: url(../images/plus.png);
+  }
+  > li.nav-active.active > a {
+    background-image: url(../images/minus.png);
+  }
+  > li.nav-active.active > a:hover {
+    background-image: url(../images/minus.png);
+  }
+  li {
+    .fa, .glyphicon {
+      font-size: 16px;
+      vertical-align: middle;
+      margin-right: 10px;
+      width: 16px;
+      text-align: center;
+    }
+  }
+  .children {
+    list-style: none;
+    display: none;
+    margin: 5px 0;
+    padding: 0;
+    > li {
+      > a:hover, > a:active, > a:focus {
+        text-decoration: none;
+        color: @success-color;
+      }
+      > a {
+        color: #94989d;
+        font-size: 13px;
+        display: block;
+        padding: 5px 0 5px 27px;
+        .transition;
+        > span {
+          margin-top: 2px;
+        }
+      }
+      .fa {
+        font-size: 12px;
+        opacity: 0.5;
+        margin-right: 5px;
+        text-align: left;
+        width: auto;
+        vertical-align: baseline;
+      }
+    }
+    > li.active > a {
+      color: @success-color;
+    }
+    ul {
+      margin-left: 12px;
+      border: 0;
+    }
+  }
+}
+.infosummary {
+  margin: 30px 0;
+  ul {
+    padding: 0;
+    margin: 20px 0 0;
+    list-style: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  li {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  li:after {
+    clear: both;
+    display: block;
+    content: '';
+  }
+  .datainfo {
+    float: left;
+    line-height: normal;
+    h4 {
+      margin: 0;
+      font-size: 16px;
+      color: @white-color;
+      opacity: 0.7;
+    }
+  }
+  span {
+    font-size: 11px;
+    font-size: 10px;
+    line-height: normal;
+    text-transform: uppercase;
+    opacity: 0.4;
+  }
+  .chart {
+    float: right;
+    margin-top: 5px;
+    opacity: 0.6;
+  }
+}

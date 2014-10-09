@@ -1,0 +1,102 @@
+.chat-view {
+  margin-right: 240px;
+  .rightpanel {
+    display: block;
+    right: 0;
+  }
+}
+
+.rightpanel {
+  width: 240px;
+  height: 100%;
+  position: fixed;
+  overflow-y: auto;
+  overflow-x: hidden;
+  top: 0;
+  right: -240px;
+  display: none;
+  color: #999999;
+  label {
+    color: #999999;
+  }
+  .nav-tabs {
+    .border-radius(0);
+    background: @main-bg-color;
+    position: fixed;
+    width: 240px;
+    > li {
+      display: table-cell;
+      width: 1%;
+      > a {
+        padding: 15px 20px 16px 20px;
+        .border-radius(0);
+        color: rgba(255,255,255,0.5);
+      }
+    }
+    > .active {
+      > a, > a:hover, > a:focus {
+        background: @main-bg-color;
+        color: @white-color;
+      }
+    }
+  }
+  .tab-content {
+    background: none;
+    .noshadow;
+    margin-top: 45px;
+  }
+  .pane-settings {
+    font-size: 13px;
+  }
+}
+
+.chat-relative-view {
+  right: 240px;
+  .rightpanel {
+    display: block;
+    right: 0;
+  }
+}
+
+.chatuserlist {
+  list-style: none;
+  padding: 0;
+  border-bottom: 1px dotted rgba(255,255,255,0.05);
+  li {
+    border-top: 1px dotted rgba(255,255,255,0.05);
+  }
+  .media-thumb {
+    .border-radius(50px);
+    border: 2px solid #999999;
+    padding: 3px;
+    display: block;
+  }
+  .media {
+    margin: 10px 0;
+    padding: 0;
+  }
+  .online .media-thumb {
+    border-color: @success-color;
+  }
+  .media-object {
+    width: 30px;
+    .border-radius(50px);
+  }
+  .media-body {
+    line-height: normal;
+    padding-top: 7px;
+    small {
+      color: #666666;
+      display: block;
+    }
+    strong {
+      color: #bbbbbb;
+      font-size: 13px;
+      margin-bottom: 4px;
+      display: block;
+    }
+  }
+  .badge {
+    margin-top: 5px;
+  }
+}
