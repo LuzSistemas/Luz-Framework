@@ -51,7 +51,7 @@ module.exports = {
                          * Missing permission for this page!
                          */
                         //TODO: Missing permissions page!
-                        res.redirect('/login')
+                        res.redirect('/admin/login')
                     }
                 }
             }
@@ -62,7 +62,7 @@ module.exports = {
         }
 
         //You shall not pass!
-        res.redirect('/login')
+        res.redirect('/admin/login')
     },
 
     /**

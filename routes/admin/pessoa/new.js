@@ -12,7 +12,7 @@ var novaPessoaController = {
          }],*/
         auth: luzUtil.allowAnonymous,
         action: function(req, res) {
-            var models = require('../../models');
+            var models = require(luzUtil.getAppPath('/models'));
             var newUser = new models.system.User(req.query);
             newUser.save(function(err, s)
             {

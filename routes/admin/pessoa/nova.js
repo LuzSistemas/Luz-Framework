@@ -10,7 +10,7 @@ var novaPessoaController = {
         action: function(req, res) {
             res.render('pessoa/nova');
             return;
-            var models = require('../../models');
+            var models = require(luzUtil.getAppPath('/models'));
             models.system.User.find({}, function(err, pessoas) {
                 res.render('index', {
                     teste: pessoas
