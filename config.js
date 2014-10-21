@@ -3,5 +3,7 @@
  */
 module.exports = {
     connectionString: "mongodb://localhost/BigJS",
-    activeTemplate: 'brackets'
+    adminTemplate: 'brackets',
+    portalTemplate: 'lifeline',
+    appDir: __dirname
 }

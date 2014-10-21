@@ -1,0 +1,234 @@
+.container{
+	width:940px;
+} 
+#top-bar{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+header{
+	background:#fff;
+	filter:alpha(opacity=90);
+}
+h3.ls-s-1{
+	background:#000;
+	filter:alpha(opacity=90);
+	color:#fff;
+}
+#menu-navigation > li:before, #menu-navigation > li.active:before,
+#menu-navigation > li:after, #menu-navigation > li.active:after{
+	display:none;
+}
+.ls-s-1 span:before{
+	display:none;
+}
+.menu ul li ul,
+.menu ul li ul li ul{
+	background:#fff;
+	filter:alpha(opacity=98);
+}
+span.ls-s-1{
+	background:#fff;
+	filter:alpha(opacity=90);
+}
+h3.ls-s-3 {
+	background:#000;
+	filter:alpha(opacity=90);
+}
+h4.ls-s-3 {
+	background:#98d560;
+	filter:alpha(opacity=90);
+}
+h5.ls-s-3 {
+	background:#fff;
+	filter:alpha(opacity=90);
+}
+span.ls-s-2{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+h3.ls-s-4{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+.nine-column{
+	width:940px;
+}
+.list_carousel2 .caroufredsel_wrapper{
+	height:380px!important;
+	width:940px!important;
+}
+.causes-image{
+	width:293px;
+}
+.cause-heading,
+.our-causes-hover{
+	background:#fff;
+	filter:alpha(opacity=90);
+}
+.our-causes-hover{
+	filter:alpha(opacity=0);
+}
+.causes-image:hover .our-causes-hover{
+	filter:alpha(opacity=90);
+}
+.three-column,
+.donate-us-box{
+	width:100%;
+	margin:20px 0 0 0;
+}
+.six-column{
+	width:100%;
+	margin:0;
+}
+.our-project-box .row > div{
+	width:50%;
+	margin:20px 0;
+	float:left;
+}
+.six-column.pull-right {
+	margin-top:20px;
+}
+footer{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+footer .col-md-3{
+	width:100%;
+	margin-bottom:30px;
+	float:left;
+}
+.footer_carousel li{
+	width:500px;
+}
+.newsletter:before{
+	display:none;
+}
+.newsletter{
+	width:100%;
+	padding-top:30px;
+}
+.newsletter > h4{
+	display:block;
+	width:100%;
+}
+.d-now .donate-btn {
+	background:#fff;
+}
+
+.story{
+	width:440px;
+}
+.story-img h5{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+
+.donate-now{
+	width:565px;
+}
+.meta{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+.cause-title{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+.details > p{
+	width:640px;
+}
+.causes-pagi{
+	background:#fff;
+	filter:alpha(opacity=90);
+}
+.causes-pagi:hover,
+.cause-tabber li a span,
+.cause-tabber li a:after,
+.cause-tabber li a:hover:after, 
+.cause-tabber li.active a:after{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+.event{
+	width:425px;
+}
+.event-thumb{
+	width:100%;
+}
+
+.staff .col-md-3 {
+	float:left;
+    width: 50%;
+}
+.staff-member img{
+	height:100%;
+}
+.about-charity-desc ul{
+	float:none;
+	display:table;
+	margin:20px auto;
+	width:auto;
+}
+.popular-post{
+	width:48%;
+	margin-right:2%;
+}
+.popular-post:last-child{
+	margin-right:0;
+}
+.popular-post-title{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+.sidebar-video img{
+	width:100%;
+}
+.gallery .col-md-4{
+	width:33.333%;
+	float:left;
+}
+.page .story:first-child{
+	margin-left:30px;
+}
+.story:nth-child(2n+3){
+	margin-left:0;
+}
+.cart-head{
+	background:#eaeaea;
+}
+
+.featured-products .col-md-4{
+	float:left;
+	width:50%;
+}
+.billing,
+.shipping{
+	width:100%;
+}
+
+.gallery-content .col-md-6{
+	width:50%;
+	float:left;
+}
+.gallery-content .col-md-4{
+	width:33.3%;
+	float:left;
+}
+.gallery-content .col-md-3{
+	width:25%;
+	float:left;
+}
+.gallery-image > span{
+	background:#000;
+	filter:alpha(opacity=90);
+}
+.gallery-image .image-lists,
+.gallery-image .image-lists img,
+.gallery-image .image-lists a {
+	filter:alpha(opacity=0);
+}
+.gallery-image:hover .image-lists,
+.gallery-image:hover .image-lists img,
+.gallery-image:hover .image-lists a {
+	filter:alpha(opacity=100);
+}

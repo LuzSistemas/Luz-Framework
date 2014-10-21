@@ -12,7 +12,6 @@ var entidadesBig = require('./models');
 var passport = require('passport');
 var pwd = require('pwd');
 var commonStrings = require('./commonStrings');
-var luzUtil = require('./LuzUtil');
 var luzAuth = require('./LuzAuth');
 var userPermissions = require("./UserPermissions");
 var ls = require('list-directory-contents');
@@ -21,8 +20,8 @@ var multer  = require('multer');
 var os = require('os')
 
 var serverStartupDate = new Date();
-
-ls('../views', function (err, tree) {
+var viewsPath = luzUtil.getAppPath('views/');
+ls(viewsPath, function (err, tree) {
     var views = {};
     for (var i in tree)
     {
@@ -30,10 +29,11 @@ ls('../views', function (err, tree) {
         {
             if (os.platform() == 'win32')
             {
-                luzUtil.setProperty(views, tree[i].replace('..\\views\\', '').split('.')[0].replace(/\\/g,'.'), true);
+                luzUtil.setProperty(views, tree[i].replace(viewsPath, '').split('.')[0].replace(/\\/g,'.'), true);
             }
-            else {
-                luzUtil.setProperty(views, tree[i].replace('../views/', '').split('.')[0].replace(new RegExp("/","g"), '.'), true);
+            else
+            {
+                luzUtil.setProperty(views, tree[i].replace(viewsPath, '').split('.')[0].replace(new RegExp("/","g"), '.'), true);
             }
         }
     }
@@ -93,27 +93,29 @@ app.use(function (req, res, next) {
              * If both apply, replace default layout with the one from the active template.
              */
 
+            var targetTemplate = config.adminTemplate;
+
             if (!options)
             {
                 options = {};
             }
 
-            if (global.views.templates[config.activeTemplate].layout && !options.layout)
+            if (global.views.templates[targetTemplate].layout && !options.layout)
             {
                 _.merge(options,
                     {
-                        layout: "templates/" + config.activeTemplate + "/layout"
+                        layout: "templates/" + targetTemplate + "/layout"
                     });
             }
             /**
              * Checks if this view exists within the active template.
              */
-            if (luzUtil.getProperty(global.views.templates[config.activeTemplate], view.replace(/\\/g, '.')))
+            if (luzUtil.getProperty(global.views.templates[targetTemplate], view.replace(/\\/g, '.')))
             {
                 /**
                  * If it does, replaces the default view with the template one.
                  */
-                view = "templates/" + config.activeTemplate + "/" + view;
+                view = "templates/" + targetTemplate + "/" + view;
             }
             _.merge(options,
                 {
@@ -247,7 +249,6 @@ app.use('/api/commonStrings', function (req, res) {
  */
 app.use('/api/routes', function (req, res) {
     //TODO: Filter menu items per user permissions and roles!!
-
     res.send(pages);
 });
 

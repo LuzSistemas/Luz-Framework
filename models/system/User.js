@@ -1,7 +1,6 @@
 /**
  * Created by Pedro Luz on 23/08/2014.
  */
-var luzUtil = require('../../LuzUtil');
 var pessoa = require("../Pessoa");
 var mongoose = require('mongoose');
 var userGroup = require ('./UserGroup');

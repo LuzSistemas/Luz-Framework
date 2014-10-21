@@ -2,7 +2,10 @@
  * Created by Pedro Luz on 22/08/2014.
  */
 var strings = require("./commonStrings");
+var config = require("./config");
+var path = require("path");
 var _ = require('lodash-node');
+
 module.exports = {
     /**
      * Validates a user given a password.
@@ -225,5 +228,16 @@ module.exports = {
                 return str;
                 break;
         }
+    },
+    /*
+    Gets the current application directory, if filename is specified, returns the full file path.
+     */
+    getAppPath: function(fp){
+        var ret = config.appDir;
+        if (fp)
+        {
+            ret = path.join(ret, fp);
+        }
+        return ret;
     }
 };

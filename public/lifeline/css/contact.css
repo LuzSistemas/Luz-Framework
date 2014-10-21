@@ -1,0 +1,27 @@
+
+
+#message {
+    color: #FF0000;
+    font-family: open sans;
+    font-size: 15px;
+    margin: 10px 0;
+    padding: 0;
+}
+
+.error_message {
+    background: url("../assets/error.gif") no-repeat scroll 10px center #FBE3E4;
+    border: 1px solid #FBC2C4;
+    border-radius: 3px;
+    color: #8A1F11;
+    display: block;
+    font-family: open sans;
+    font-size: 15px;
+    line-height: 14px;
+    padding: 10px 10px 10px 35px;
+}
+
+.loader { padding: 0 10px; }
+
+#contact #success_page h1 { background: url('../assets/success.gif') left no-repeat; padding-left:22px; }
+
+acronym { border-bottom:1px dotted #ccc; }
