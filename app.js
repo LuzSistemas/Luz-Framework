@@ -22,7 +22,9 @@ var os = require('os')
 
 var serverStartupDate = new Date();
 
-ls('../views', function (err, tree) {
+var viewPath = path.join(__dirname, 'views')
+
+ls(viewPath, function (err, tree) {
     var views = {};
     for (var i in tree)
     {
@@ -30,10 +32,13 @@ ls('../views', function (err, tree) {
         {
             if (os.platform() == 'win32')
             {
-                luzUtil.setProperty(views, tree[i].replace('..\\views\\', '').split('.')[0].replace(/\\/g,'.'), true);
+                var fPath = tree[i].replace(viewPath + "\\", '').replace(/\\/g,'.').split('.');
+                fPath.pop();
+                luzUtil.setProperty(views, fPath.join("."), true);
             }
             else {
-                luzUtil.setProperty(views, tree[i].replace('../views/', '').split('.')[0].replace(new RegExp("/","g"), '.'), true);
+                //TODO
+                luzUtil.setProperty(views, tree[i].replace(viewPath, '').split('.')[0].replace(new RegExp("/","g"), '.'), true);
             }
         }
     }
@@ -53,7 +58,7 @@ var app = express();
 /**
  * Internal Express middleware setup
  */
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', viewPath);
 app.set('view engine', 'ejs');
 app.use(favicon("./public/brackets/images/favicon.png"));
 app.use(logger('dev'));
