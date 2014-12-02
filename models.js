@@ -39,5 +39,9 @@ function setupModels(model, parentModels) {
     }
 }
 
-mongoose.connect(config.connectionString);
+if (config.dbEnabled == true)
+{
+    mongoose.connect(config.connectionString);
+}
+
 module.exports = entities;

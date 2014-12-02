@@ -3,13 +3,17 @@
  */
 module.exports = {
     connectionString: "mongodb://localhost/BigJS",
-    dbEnabled: false,
-	adminTemplate: 'brackets',
+<<<<<<< Updated upstream
+    adminTemplate: 'brackets',
     portalTemplate: 'lifeline',
     appDir: __dirname
+=======
+    activeTemplate: 'brackets',
+    dbEnabled: false,
     mail:
     {
         azureStorageAccount: 'incastorage',
         azureStorageKey: 'uaeIeLOhb48d46xgb7wdGzXtSm3VAuudCGoTGgbZBrYq/Vy2TkAiHVreyALSYNoQKM+yDgkWfuxRUTmoLiVf8g=='
     }
+>>>>>>> Stashed changes
 }
