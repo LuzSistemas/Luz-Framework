@@ -2,12 +2,13 @@
  * Created by Pedro on 27/11/2014.
  */
 var azure = require('azure-storage');
-var strings = require("../../../commonStrings");
-var luzUtil = require("../../../LuzUtil");
-var config = require("../../../config");
+var strings = require("../../commonStrings");
+var luzUtil = require("../../LuzUtil");
+var config = require("../../config");
 var guid = require("easy-guid");
 var mailIncomingController = {
     post: {
+        api: true,
         auth: luzUtil.allowAnonymous,
         action: function(req, res)
         {

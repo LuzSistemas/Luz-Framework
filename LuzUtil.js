@@ -239,5 +239,40 @@ module.exports = {
             ret = path.join(ret, fp);
         }
         return ret;
+    },
+
+    /*
+    Handles incoming mail from SendGrid inbound parse service and sends relevants data to database.
+     */
+    handleIncomingSendGridMail: function(key, req)
+    {
+        if (req && (typeof req == 'string' || req instanceof String))
+        {
+            req = JSON.parse(req);
+        }
+
+        var models = require(luzUtil.getAppPath('/models'));
+        var newMail = new models.system.Mail();
+
+        var to = req.to.split(',');
+        to = _.map(to, function(t){
+            return t.trim();
+        });
+
+        newMail.key = key;
+        newMail.to = to;
+        newMail.from = req.from;
+        newMail.spam_score = req.spam_score;
+        newMail.subject = req.subject;
+        newMail.date = new Date();
+
+        newMail.save(function(err, s)
+        {
+            if (err)
+            {
+                return err;
+            }
+            return true;
+        });
     }
 };

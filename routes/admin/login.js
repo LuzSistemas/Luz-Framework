@@ -16,6 +16,10 @@ var loginController = {
     post: {
         action: function (req, res, next) {
             passport.authenticate('local', function (err, user) {
+                if (user == false)
+                {
+                    err = commonStrings.userNotFound;
+                }
                 if (err) {
                     return res.render('login', {currentPage: {error: err}, layout: 'standalone'});
                 }
@@ -23,7 +27,7 @@ var loginController = {
                     if (err) {
                         return next(err);
                     }
-                    return res.redirect('/pessoa/nova');
+                    return res.redirect('/admin/pessoa/nova');
                 });
             })(req, res, next);
         },

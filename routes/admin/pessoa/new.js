@@ -3,6 +3,21 @@
  */
 var userPermissions = require("../../../UserPermissions");
 var strings = require("../../../commonStrings");
+
+var funcNewUser = function(req, res) {
+    var models = require(luzUtil.getAppPath('/models'));
+    var userData = req.method == "POST" ? req.body : req.query;
+    var newUser = new models.system.User(userData);
+    newUser.save(function(err, s)
+    {
+        if (err)
+        {
+            return res.send(err);
+        }
+        return res.send(newUser);
+    });
+};
+
 var novaPessoaController = {
     get: {
         /*necessaryPermissions: [{
@@ -11,18 +26,16 @@ var novaPessoaController = {
          description: "Permissão para criar novos usuários no sistema."
          }],*/
         auth: luzUtil.allowAnonymous,
-        action: function(req, res) {
-            var models = require(luzUtil.getAppPath('/models'));
-            var newUser = new models.system.User(req.query);
-            newUser.save(function(err, s)
-            {
-                if (err)
-                {
-                    return res.send(err);
-                }
-                return res.send(newUser);
-            });
-        }
+        action: funcNewUser
+    },
+    post: {
+        /*necessaryPermissions: [{
+         key: 'createUser',
+         title: strings.createUser,
+         description: "Permissão para criar novos usuários no sistema."
+         }],*/
+        auth: luzUtil.allowAnonymous,
+        action: funcNewUser
     }
 };
 
