@@ -10,6 +10,7 @@ if (global.models)
 var entities = {};
 var mongoose = require('mongoose');
 var config = require("./config");
+var luzUtil = require("./LuzUtil");
 var models = require('require-dir')('./models', {
     recurse: true
 });

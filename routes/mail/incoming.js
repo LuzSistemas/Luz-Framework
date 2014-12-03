@@ -15,16 +15,19 @@ var mailIncomingController = {
             try
             {
                 var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
-                blobService.createContainerIfNotExists('mails', function(error, result, response){
-                    blobService.createBlockBlobFromText('mails', guid.new(16) + ".json", JSON.stringify(req.body), function(e, resu, resp){
+                blobService.createContainerIfNotExists('mails', function(error, result, response) {
+                    var key =  guid.new(16) + ".json";
+                    blobService.createBlockBlobFromText('mails', key, JSON.stringify(req.body), function(e, resu, resp) {
                         if (!e){
+                            luzUtil.handleIncomingSendGridMail(key, req);
                             res.status(200);
                             res.send("OK");
-                            return;
                         }
-                        res.status(500);
-                        res.send(e);
-                        return;
+                        else
+                        {
+                            res.status(500);
+                            res.send(e);
+                        }
                     });
                 });
             }
@@ -32,7 +35,6 @@ var mailIncomingController = {
             {
                 res.status(500);
                 res.send(ex);
-                return;
             }
         }
     }

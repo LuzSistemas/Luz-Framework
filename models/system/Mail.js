@@ -10,8 +10,10 @@ var mailSchema = {
     subject: {type: String},
     spam_score: {type: Number},
     attachments:[{
+        key: {type: String, required: true},
         filename: {type: String},
-        type: {type: String}
+        mimeType: {type: String},
+        size: {type: Number}
     }],
     date: {type: Date, required: true}
 };

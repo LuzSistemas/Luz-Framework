@@ -18,6 +18,8 @@ var ls = require('list-directory-contents');
 var config = require("./config");
 var multer  = require('multer');
 var os = require('os')
+var luzUtil = require ('./LuzUtil');
+GLOBAL.luzUtil = luzUtil;
 
 var serverStartupDate = new Date();
 var viewsPath = luzUtil.getAppPath('views/');

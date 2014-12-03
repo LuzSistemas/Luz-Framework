@@ -5,6 +5,8 @@ var strings = require("./commonStrings");
 var config = require("./config");
 var path = require("path");
 var _ = require('lodash-node');
+var azure = require('azure-storage');
+var fs = require('fs');
 
 module.exports = {
     /**
@@ -246,33 +248,60 @@ module.exports = {
      */
     handleIncomingSendGridMail: function(key, req)
     {
-        if (req && (typeof req == 'string' || req instanceof String))
-        {
-            req = JSON.parse(req);
-        }
-
         var models = require(luzUtil.getAppPath('/models'));
         var newMail = new models.system.Mail();
 
-        var to = req.to.split(',');
+        var to = req.body.to.split(',');
         to = _.map(to, function(t){
             return t.trim();
         });
 
-        newMail.key = key;
-        newMail.to = to;
-        newMail.from = req.from;
-        newMail.spam_score = req.spam_score;
-        newMail.subject = req.subject;
-        newMail.date = new Date();
+        var attachments = [];
+        var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
 
-        newMail.save(function(err, s)
-        {
-            if (err)
+        blobService.createContainerIfNotExists('mailattachments', function(error, result, response) {
+            _.forEach(req.files, function(f)
             {
-                return err;
+                attachments.push(
+                    {
+                        key: f.name,
+                        filename: f.originalname,
+                        mimeType: f.mimetype,
+                        size: f.size
+                    });
+                fs.readFile(f.path, function(err, data){
+                    if (!err){
+                        blobService.createBlockBlobFromText('mailattachments', f.name, data, function(e, resu, resp) {
+                            if (!e)
+                            {
+                                fs.unlink(f.path);
+                            }
+                        });
+                    }
+                });
+
+            });
+
+            newMail.key = key;
+            newMail.to = to;
+            newMail.from = req.body.from;
+            newMail.spam_score = req.body.spam_score;
+            newMail.subject = req.body.subject;
+            newMail.date = new Date();
+
+            if (req.body.attachments > 0)
+            {
+                newMail.attachments = attachments;
             }
-            return true;
+
+            newMail.save(function(err, s)
+            {
+                if (err)
+                {
+                    return err;
+                }
+                return true;
+            });
         });
     }
 };
