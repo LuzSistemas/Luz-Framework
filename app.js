@@ -20,6 +20,8 @@ var multer  = require('multer');
 var os = require('os')
 var luzUtil = require ('./LuzUtil');
 GLOBAL.luzUtil = luzUtil;
+GLOBAL.config = config;
+GLOBAL.commonStrings = commonStrings;
 
 var serverStartupDate = new Date();
 var viewsPath = luzUtil.getAppPath('views/');
@@ -154,9 +156,10 @@ buildMenuItems(menuItems, pages, "/");
 /**
  * Builds all the menu items based on the pages folder.
  * @param items The parent menu item reference.
- * @param pages The pages to be processed into menu items.
+ * @param pgs The pages to be processed into menu items.
  */
-function buildMenuItems(items, pages, parentUrl) {
+function buildMenuItems(items, pgs, parentUrl) {
+    var pages = pgs.admin;
     for (var p in pages) {
         /**
          * Checks if page has a menu item definition.

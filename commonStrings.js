@@ -18,5 +18,7 @@ module.exports = {
     exit: 'Sair',
     profile: 'Perfil',
     account: 'Conta',
-    accountSettings: 'Configurações da conta'
+    accountSettings: 'Configurações da conta',
+    viewMail: 'Ver E-mails',
+    mailBox: 'Caixa de entrada'
 }
