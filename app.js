@@ -143,11 +143,11 @@ setupPages(pages, "/", function (router, extractedPermissions) {
     app.use(router);
     _.forEach(extractedPermissions, function(newPermission) {
         /**
-         * Ignore permissions with the same key.
+         * Ignoring permissions with the same key.
          */
         if (_.isUndefined(userPermissions[newPermission.key]))
         {
-            userPermissions[key] = newPermission;
+            userPermissions[newPermission.key] = newPermission;
         }
     });
 });
@@ -207,12 +207,16 @@ function setupPages(pages, parentUrl, cb, router) {
                 var userAuthenticationStrategy = pages[r].controller[m].auth ? pages[r].controller[m].auth : luzUtil.checkAuth;
 
                 //Checks if there any necessary permissions for accessing this action
-                if (pages[r].controller[m].action.necessaryPermissions)
+                if (pages[r].controller[m].necessaryPermissions)
                 {
                     //Append new user permissions
-                    userPermissions = userPermissions.concat(pages[r].controller[m].action.necessaryPermissions);
+                    userPermissions = userPermissions.concat(pages[r].controller[m].necessaryPermissions);
                 }
                 router[m](tUrl, userAuthenticationStrategy, pages[r].controller[m].action)
+                if (tUrl.lastIndexOf('/') == (tUrl.length - 1) && pages[r].page)
+                {
+                    router[m](tUrl + 'index', userAuthenticationStrategy, pages[r].controller[m].action)
+                }
             }
         }
         else {

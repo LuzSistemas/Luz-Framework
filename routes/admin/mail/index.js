@@ -14,9 +14,7 @@ var mailIndexController = {
             description: "Permissão para visualizar e-mails no sistema."
         }],
         action: function(req, res) {
-            models.system.User.find({}, function(err, pessoas) {
-                res.send(pessoas);
-            });
+            res.send('indo...');
         }
     }
 };
@@ -25,6 +23,14 @@ module.exports = {
     controller: mailIndexController,
     menuItem: {
         title: commonStrings.mailBox,
-        icon: "fa-open"
+        icon: "fa-envelope"
+    },
+    page: {
+        title: commonStrings.mailBox,
+        header: {
+            title: commonStrings.mailBox,
+            description: 'Bem-vindo aos seus e-mails.',
+            icon: 'fa-envelope'
+        }
     }
 };
