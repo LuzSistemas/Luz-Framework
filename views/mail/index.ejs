@@ -1,45 +1,32 @@
-<div class="row">
+<script type="text/javascript" src="/javascripts/angular/controllers/MailInboxController.js"></script>
+<div class="row" data-ng-controller="MailInboxController">
     <div class="col-sm-3 col-lg-2">
-        <a href="compose.html" class="btn btn-danger btn-block btn-compose-email">Compose Email</a>
+        <a data-ng-click="composeMail();" class="btn btn-primary btn-block btn-compose-email">{{commonStrings.mail.compose}}</a>
 
         <ul class="nav nav-pills nav-stacked nav-email">
-            <li class="active">
-                <a href="email.html">
-                    <span class="badge pull-right">2</span>
-                    <i class="glyphicon glyphicon-inbox"></i> Inbox
+            <li data-ng-repeat="sf in mailbox.systemFolders" data-ng-class="'active': mailbox.currentFolder == sf">
+                <a data-ng-click="openFolder(sf);">
+                    <span ng-if="sf.unreadCount > 0" class="badge pull-right">{{sf.unreadCount}}</span>
+                    <i class="glyphicon glyphicon-{{sf.icon}}"></i> {{sf.title}}
                 </a>
             </li>
-            <li><a href="#"><i class="glyphicon glyphicon-star"></i> Starred</a></li>
-            <li><a href="#"><i class="glyphicon glyphicon-send"></i> Sent Mail</a></li>
-            <li>
-                <a href="#">
-                    <span class="badge pull-right">3</span>
-                    <i class="glyphicon glyphicon-pencil"></i> Draft
-                </a>
-            </li>
-            <li><a href="#"><i class="glyphicon glyphicon-trash"></i> Trash</a></li>
         </ul>
 
         <div class="mb30"></div>
+        <div data-ng-if="mailBox.userFolders && mailBox.userFolders.length > 0">
+            <h5 class="subtitle">{{commonStrings.folders}}</h5>
+            <ul class="nav nav-pills nav-stacked nav-email mb20">
+                <li data-ng-repeat="f in mailbox.userFolders" data-ng-class="active: mailbox.currentFolder == f">
+                    <a data-ng-click="openFolder(f);">
+                        <span ng-if="f.unreadMail > 0" class="badge pull-right">{{f.unreadMail}}</span>
+                        <i class="glyphicon glyphicon-{{f.icon}}"></i> {{f.title}}
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-        <h5 class="subtitle">Folders</h5>
-        <ul class="nav nav-pills nav-stacked nav-email mb20">
-            <li>
-                <a href="email.html">
-                    <span class="badge pull-right">2</span>
-                    <i class="glyphicon glyphicon-folder-open"></i> Conference
-                </a>
-            </li>
-            <li><a href="#"><i class="glyphicon glyphicon-folder-open"></i> Newsletter</a></li>
-            <li><a href="#"><i class="glyphicon glyphicon-folder-open"></i> Invitations</a></li>
-            <li>
-                <a href="#">
-                    <i class="glyphicon glyphicon-folder-open"></i> Promotions
-                </a>
-            </li>
-        </ul>
-
-    </div><!-- col-sm-3 -->
+    </div>
+    <!-- col-sm-3 -->
 
     <div class="col-sm-9 col-lg-10">
 
@@ -48,9 +35,12 @@
 
                 <div class="pull-right">
                     <div class="btn-group mr10">
-                        <button class="btn btn-sm btn-white tooltips" type="button" data-toggle="tooltip" title="Archive"><i class="glyphicon glyphicon-hdd"></i></button>
-                        <button class="btn btn-sm btn-white tooltips" type="button" data-toggle="tooltip" title="Report Spam"><i class="glyphicon glyphicon-exclamation-sign"></i></button>
-                        <button class="btn btn-sm btn-white tooltips" type="button" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash"></i></button>
+                        <button class="btn btn-sm btn-white tooltips" type="button" data-toggle="tooltip" title="Archive"><i class="glyphicon glyphicon-hdd"></i>
+                        </button>
+                        <button class="btn btn-sm btn-white tooltips" type="button" data-toggle="tooltip" title="Report Spam"><i class="glyphicon glyphicon-exclamation-sign"></i>
+                        </button>
+                        <button class="btn btn-sm btn-white tooltips" type="button" data-toggle="tooltip" title="Delete"><i class="glyphicon glyphicon-trash"></i>
+                        </button>
                     </div>
 
                     <div class="btn-group mr10">
@@ -60,10 +50,14 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Conference</a></li>
-                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Newsletter</a></li>
-                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Invitations</a></li>
-                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Promotions</a></li>
+                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Conference</a>
+                                </li>
+                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Newsletter</a>
+                                </li>
+                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Invitations</a>
+                                </li>
+                                <li><a href="#"><i class="glyphicon glyphicon-folder-open mr5"></i> Promotions</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="btn-group nomargin">
@@ -72,18 +66,24 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="#"><i class="glyphicon glyphicon-tag mr5"></i> Web</a></li>
-                                <li><a href="#"><i class="glyphicon glyphicon-tag mr5"></i> Photo</a></li>
-                                <li><a href="#"><i class="glyphicon glyphicon-tag mr5"></i> Video</a></li>
+                                <li><a href="#"><i class="glyphicon glyphicon-tag mr5"></i> Web</a>
+                                </li>
+                                <li><a href="#"><i class="glyphicon glyphicon-tag mr5"></i> Photo</a>
+                                </li>
+                                <li><a href="#"><i class="glyphicon glyphicon-tag mr5"></i> Video</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="btn-group">
-                        <button class="btn btn-sm btn-white" type="button"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                        <button class="btn btn-sm btn-white" type="button"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                        <button class="btn btn-sm btn-white" type="button"><i class="glyphicon glyphicon-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-sm btn-white" type="button"><i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
                     </div>
-                </div><!-- pull-right -->
+                </div>
+                <!-- pull-right -->
 
                 <h5 class="subtitle mb5">Inbox</h5>
                 <p class="text-muted">Showing 1 - 15 of 230 messages</p>
@@ -465,11 +465,16 @@
 
                         </tbody>
                     </table>
-                </div><!-- table-responsive -->
+                </div>
+                <!-- table-responsive -->
 
-            </div><!-- panel-body -->
-        </div><!-- panel -->
+            </div>
+            <!-- panel-body -->
+        </div>
+        <!-- panel -->
 
-    </div><!-- col-sm-9 -->
+    </div>
+    <!-- col-sm-9 -->
 
-</div><!-- row -->
+</div>
+<!-- row -->

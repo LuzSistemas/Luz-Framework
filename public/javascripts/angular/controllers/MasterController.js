@@ -49,20 +49,25 @@ window.BigJS.controller('MasterController', ['$scope', '$http', function ($scope
      */
     var cookieCommonStrings = null;//$.cookie("commonStrings"); TEMPORARY!!!!
     if (!cookieCommonStrings) {
-        $http.get('/api/commonStrings')
+        $.ajax({
+            url: '/api/commonStrings',
+            async: false
+        })
             .success(function (data) {
                 /*
                  Caches common string a cookie that expires in 3 days.
                  */
                 $.cookie('commonStrings', JSON.stringify(data), {expires: 3, path: '/'});
-                $scope.strings = data;
+                window.strings = $scope.strings = data;
+                window.commonStrings = $scope.commonStrings = data;
             })
             .error(function (err) {
                 console.log('Error retrieving common strings from server: ' + err);
             });
     }
     else {
-        $scope.strings = JSON.parse(cookieCommonStrings);
+        window.strings = $scope.strings = JSON.parse(cookieCommonStrings);
+        window.commonStrings = $scope.commonStrings = JSON.parse(cookieCommonStrings);
     }
 }]);
 

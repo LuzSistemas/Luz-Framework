@@ -19,6 +19,18 @@ module.exports = {
     profile: 'Perfil',
     account: 'Conta',
     accountSettings: 'Configurações da conta',
-    viewMail: 'Ver E-mails',
-    mailBox: 'Caixa de entrada'
+    folders: 'Pastas',
+    folder: 'Pasta',
+    mail:{
+        inbox: 'Caixa de entrada',
+        compose: 'Escrever e-mail',
+        view: 'Ver E-mails',
+            folders:
+            {
+                starred: 'Com estrela',
+                sent: 'Enviados',
+                drafts: 'Rascunho',
+                trash: 'Lixeira'
+            }
+    }
 }

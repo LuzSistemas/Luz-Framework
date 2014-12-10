@@ -11,7 +11,11 @@ window.BigJS.controller('LeftMenuController', ['$scope', '$http', function ($sco
 
     var menuItems = JSON.parse(cookieMenuItems);
     $scope.menuItems = menuItems.menuItems;
-    $http.get('/api/menuItems')
+    $.ajax(
+        {
+            url: '/api/menuItems',
+            async: false
+        })
         .success(function (data) {
             //If menu items have been updated
             if (data.lastUpdate != menuItems.lastUpdate)

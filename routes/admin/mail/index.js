@@ -10,7 +10,7 @@ var mailIndexController = {
     get: {
         necessaryPermissions: [{
             key: 'viewMail',
-            title: commonStrings.viewMail,
+            title: commonStrings.mail.view,
             description: "Permissão para visualizar e-mails no sistema."
         }],
         action: function(req, res) {
@@ -22,13 +22,13 @@ var mailIndexController = {
 module.exports = {
     controller: mailIndexController,
     menuItem: {
-        title: commonStrings.mailBox,
+        title: commonStrings.mail.inbox,
         icon: "fa-envelope"
     },
     page: {
         title: commonStrings.mailBox,
         header: {
-            title: commonStrings.mailBox,
+            title: commonStrings.mail.inbox,
             description: 'Bem-vindo aos seus e-mails.',
             icon: 'fa-envelope'
         }
