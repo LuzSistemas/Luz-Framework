@@ -146,7 +146,7 @@ module.exports = {
                     currentPage[tUrl] = {};
                 }
 
-                currentPage = counter == urlPath.length ? currentPage[tUrl].page : currentPage[tUrl];
+                currentPage = counter == urlPath.length ? (currentPage[tUrl].index ? currentPage[tUrl].index.page : currentPage[tUrl].page) : currentPage[tUrl];
 
                 if (!currentPage)
                 {

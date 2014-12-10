@@ -14,7 +14,7 @@ var mailIndexController = {
             description: "Permissão para visualizar e-mails no sistema."
         }],
         action: function(req, res) {
-            res.send('indo...');
+            res.render('\\mail\\index', {});
         }
     }
 };
