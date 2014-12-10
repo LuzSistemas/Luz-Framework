@@ -21,10 +21,18 @@ module.exports = {
     accountSettings: 'Configurações da conta',
     folders: 'Pastas',
     folder: 'Pasta',
+    archive: 'Arquivar',
+    delete: 'Excluir',
+    showing: 'Mostrando',
+    messages: 'Mensagens',
+    of: 'De',
     mail:{
         inbox: 'Caixa de entrada',
         compose: 'Escrever e-mail',
         view: 'Ver E-mails',
+        moveToFolder: 'Mover para pasta',
+        reportSpam: 'Reportar Spam',
+        tag: 'Etiqueta',
             folders:
             {
                 starred: 'Com estrela',

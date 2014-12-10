@@ -10,6 +10,31 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
     $scope.mailbox =
     {
         currentFolder: inbox,
+        userTags:[
+            {title: 'INCA'},
+            {title: 'Pedro'}
+        ],
+        page: {
+            min: 1,
+            max: 15,
+            total: 200,
+            mails:[
+                {
+                    unread: true,
+                    key: '123',
+                    data: new Date(),
+                    from: 'myself@google.com',
+                    subject: 'Just a test...'
+                }
+            ]
+        },
+        userFolders:[
+            {
+                title: 'Teste Pasta 1',
+                icon: 'eye',
+                unreadCount: 10,
+            }
+        ],
         systemFolders:[
             inbox,
             {
@@ -33,5 +58,50 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
                 unreadCount: 0
             }
         ]
+    };
+
+    $scope.moveToFolder = function (folder)
+    {
+        debugger;
+    };
+
+    $scope.openFolder = function (folder)
+    {
+        debugger;
+    };
+
+    $scope.reportSpam = function ()
+    {
+        debugger;
+    };
+
+    $scope.archive = function ()
+    {
+        debugger;
+    };
+
+    $scope.trash = function ()
+    {
+        debugger;
+    };
+
+    $scope.nextPage = function ()
+    {
+        debugger;
+    };
+
+    $scope.previousPage = function ()
+    {
+        debugger;
+    };
+
+    $scope.tag = function (tag)
+    {
+        debugger;
+    };
+
+    $scope.star = function (mail)
+    {
+        debugger;
     };
 }]);
