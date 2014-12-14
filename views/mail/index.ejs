@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    window.mailbox = JSON.parse('<%= JSON.stringify(mailbox)%>');
+    window.mailbox = JSON.parse('<%- JSON.stringify(mailbox)%>');
 </script>
 <script type="text/javascript" src="/javascripts/angular/controllers/MailInboxController.js"></script>
 <div class="row" data-ng-controller="MailInboxController">
@@ -16,10 +16,10 @@
         </ul>
 
         <div class="mb30"></div>
-        <div data-ng-if="mailbox.userFolders && mailbox.userFolders.length > 0">
+        <div data-ng-if="mailbox.folders && mailbox.folders.length > 0">
             <h5 class="subtitle">{{commonStrings.folders}}</h5>
             <ul class="nav nav-pills nav-stacked nav-email mb20">
-                <li data-ng-repeat="f in mailbox.userFolders" data-ng-class="{active: mailbox.currentFolder == f}">
+                <li data-ng-repeat="f in mailbox.folders" data-ng-class="{active: mailbox.currentFolder == f}">
                     <a data-ng-click="openFolder(f);">
                         <span ng-if="f.unreadCount > 0" class="badge pull-right">{{f.unreadCount}}</span>
                         <i class="glyphicon glyphicon-{{f.icon}}"></i> {{f.title}}
@@ -53,7 +53,7 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li data-ng-repeat="uf in mailbox.userFolders">
+                                <li data-ng-repeat="uf in mailbox.folders">
                                     <a data-ng-click="moveToFolder(uf);">
                                         <i class="glyphicon glyphicon-folder-open mr5"></i> {{f.title}}
                                     </a>
@@ -66,7 +66,7 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li data-ng-repeat="t in mailbox.userTags">
+                                <li data-ng-repeat="t in mailbox.tags">
                                     <a data-ng-click="tag(t);">
                                         <i class="glyphicon glyphicon-tag mr5"></i> {{t.title}}
                                     </a>
@@ -85,16 +85,16 @@
                 <!-- pull-right -->
 
                 <h5 class="subtitle mb5">{{commonStrings.mail.inbox}}</h5>
-                <p class="text-muted">{{commonStrings.showing}} {{mailbox.page.min}} - {{mailbox.page.max}} {{commonStrings.of.toLowerCase()}} {{mailbox.page.total}} {{commonStrings.messages.toLowerCase()}}</p>
+                <p class="text-muted">{{commonStrings.showing}} {{mailbox.page.min()}} - {{mailbox.page.max()}} {{commonStrings.of.toLowerCase()}} {{mailbox.page.total()}} {{commonStrings.messages.toLowerCase()}}</p>
 
                 <div class="table-responsive">
                     <table class="table table-email">
                         <tbody>
-                            <tr data-ng-repeat="m in mailbox.page.mails" data-ng-class="{unread: m.unread == true}">
+                            <tr data-ng-repeat="m in mailbox.page.mails()" data-ng-class="{unread: m.readOn != null}">
                                 <td>
                                     <div class="ckbox ckbox-success">
-                                        <input type="checkbox" id="{{m.key.replace('.json','')}}">
-                                        <label for="{{m.key.replace('.json','')}}"></label>
+                                        <input type="checkbox" id="{{m.mail.key.replace('.json','')}}">
+                                        <label for="{{m.mail.key.replace('.json','')}}"></label>
                                     </div>
                                 </td>
                                 <td>
@@ -106,10 +106,10 @@
                                             <!--<img alt="" src="{{m.}}" class="media-object">-->
                                         <!--</a>-->
                                         <div class="media-body">
-                                            <span class="media-meta pull-right">{{m.date | date :'short'}}</span>
-                                            <h4 class="text-primary">{{m.from.replace('<','').replace('>','')}}</h4>
+                                            <span class="media-meta pull-right">{{m.mail.date | date :'short'}}</span>
+                                            <h4 class="text-primary">{{m.mail.from.replace('<','').replace('>','')}}</h4>
                                             <small class="text-muted"></small>
-                                            <p class="email-summary">{{m.subject}}</p>
+                                            <p class="email-summary">{{m.mail.subject}}</p>
                                         </div>
                                     </div>
                                 </td>

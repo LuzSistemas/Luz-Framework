@@ -15,22 +15,23 @@ var mailIndexController = {
         }],
         action: function(req, res) {
             debugger;
-            models.system.Mailbox.findOne({userId: req.user._id}, function(err, mailbox)
+            models.system.Mailbox.findOne({userId: req.user._id}).populate('mails.mail').exec(function(err, mailbox)
             {
-                if (!err && mailbox)
+                if (!err)
                 {
-                    models.system.Mail.find({}, function(err, mails){
+                   /* models.system.Mail.find({}, function(err, mails){
                         _.forEach(mails, function (m){
                             luzUtil.processEmail(m);
                         });
+                    });*/
 
-                        res.render('\\mail\\index', {
-                            mailbox: mailbox
-                        });
+                    debugger;
+                    res.render('\\mail\\index', {
+                        mailbox: mailbox
                     });
                 }
                 else{
-                    res.send('error');
+                    res.send(err);
                 }
             });
         }

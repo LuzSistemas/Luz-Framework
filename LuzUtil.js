@@ -314,12 +314,14 @@ module.exports = {
         var dbMailbox = models.system.Mailbox;
         _.each(mail.to, function (t){
             t = t.replace('<', '').replace('<', '').trim().toLowerCase();
-            dbMailbox.findOne({to: {$in: [t]}},function(err, mailbox){
-                if (!err && mailbox){
-                    mailbox.mails.push({
-                        id: mail._id
+            dbMailbox.find({addresses: {$in: [t]}},function(err, mailboxes){
+                if (!err){
+                    _.forEach(mailboxes, function (mailbox){
+                        mailbox.mails.push({
+                            mail: mail
+                        });
+                        mailbox.save();
                     });
-                    mailbox.save();
                 }
             });
         });

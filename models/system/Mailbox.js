@@ -8,6 +8,7 @@ var mailboxSchema = {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    addresses: [String],
     pageSize: {
         type: Number
     },
@@ -18,7 +19,8 @@ var mailboxSchema = {
         }
     }],
     mails: [{
-        id: mongoose.Schema.Types.ObjectId,
+        _id: false,
+        mail: {type: mongoose.Schema.Types.ObjectId, ref: 'Mail'},
         readOn: Date,
         tags: [String]
     }],

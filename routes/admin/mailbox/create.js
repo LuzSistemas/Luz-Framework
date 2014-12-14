@@ -19,6 +19,7 @@ var createMailboxController = {
                 }
                 mailbox = new models.system.Mailbox();
                 mailbox.userId = req.body.userId;
+                mailbox.addresses = req.body.addresses;
                 mailbox.pageSize = config.mail.defaults.pageSize;
                 mailbox.save(function(err){
                     if (!err)

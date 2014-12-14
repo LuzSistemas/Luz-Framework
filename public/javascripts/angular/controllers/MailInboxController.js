@@ -7,7 +7,32 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
         icon: 'inbox',
         unreadCount: 2
     };
-    $scope.mailbox =
+
+    $scope.mailbox = window.mailbox;
+    $scope.mailbox.page =
+    {
+        current: 1,
+        min: function () {
+            var min = $scope.mailbox.pageSize * ($scope.mailbox.page.current - 1);
+            return min;
+        },
+        max: function () {
+            var max = $scope.mailbox.pageSize * $scope.mailbox.page.current;
+            if (max > $scope.mailbox.mails.length){
+                max = $scope.mailbox.mails.length;
+            }
+            return max;
+        },
+        mails: function () {
+            return $scope.mailbox.mails.slice($scope.mailbox.page.min(), $scope.mailbox.page.max());
+        },
+        total: function () {
+            return $scope.mailbox.mails().length();
+        }
+    }
+
+
+    /*$scope.mailbox =
     {
         currentFolder: inbox,
         userTags:[
@@ -58,7 +83,7 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
                 unreadCount: 0
             }
         ]
-    };
+    };*/
 
     $scope.moveToFolder = function (folder)
     {
