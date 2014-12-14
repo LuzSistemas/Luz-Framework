@@ -1,12 +1,10 @@
 /**
  * Created by Pedro Luz on 22/08/2014.
  */
-var strings = require("./commonStrings");
-var config = require("./config");
 var path = require("path");
-var _ = require('lodash-node');
 var azure = require('azure-storage');
 var fs = require('fs');
+var _ = require('lodash-node');
 
 module.exports = {
     /**
@@ -15,9 +13,9 @@ module.exports = {
      * @param pwd Any given password to be validated.
      * @param cb Callback function(err, result).
      */
-    validatePassword: function (user, pwd, cb) {
+    validatePassword: function(user, pwd, cb) {
         var pass = require('pwd');
-        pass.hash(pwd, user.salt, function (err, hash) {
+        pass.hash(pwd, user.salt, function(err, hash) {
             if (err) {
                 cb(err);
             }
@@ -32,7 +30,7 @@ module.exports = {
      * @param next The next() function to be executed in the middleware.
      * @returns {*}
      */
-    checkAuth: function (req, res, next) {
+    checkAuth: function(req, res, next) {
         //Checks if there's an user logged
         if (req.isAuthenticated()) {
             var currentPage = req.session.currentPage;
@@ -52,13 +50,13 @@ module.exports = {
                         /**
                          * Missing permission for this page!
                          */
-                        //TODO: Missing permissions page!
+                            //TODO: Missing permissions page!
                         res.redirect('/admin/login')
                     }
                 }
             }
             /*
-            Ok! Authorized!
+             Ok! Authorized!
              */
             return next();
         }
@@ -74,7 +72,7 @@ module.exports = {
      * @param next The next() function to be executed in the middleware.
      * @returns {*}
      */
-    allowAnonymous: function (req, res, next) {
+    allowAnonymous: function(req, res, next) {
         return next();
     },
 
@@ -83,7 +81,7 @@ module.exports = {
      * @param deleteValue The value to be removed.
      * @returns {Array} The Array instance already cleaned up.
      */
-    cleanArray: function (arr, deleteValue) {
+    cleanArray: function(arr, deleteValue) {
         for (var i = 0; i < arr.length; i++) {
             if (arr[i] == deleteValue) {
                 arr.splice(i, 1);
@@ -98,15 +96,13 @@ module.exports = {
      * @param req The request relayed from the controller.
      * @param cb The callback for getting this result: function(currentPage)
      */
-    getCurrentPage: function (req, cb) {
+    getCurrentPage: function(req, cb) {
 
         /*
-        Igore API requests (that doesn't need a currentPage variable!)
+         Igore API requests (that doesn't need a currentPage variable!)
          */
-        if (req.url.indexOf('/api') >= 0)
-        {
-            if (cb)
-            {
+        if (req.url.indexOf('/api') >= 0) {
+            if (cb) {
                 return cb(null);
             }
 
@@ -148,8 +144,7 @@ module.exports = {
 
                 currentPage = counter == urlPath.length ? (currentPage[tUrl].index ? currentPage[tUrl].index.page : currentPage[tUrl].page) : currentPage[tUrl];
 
-                if (!currentPage)
-                {
+                if (!currentPage) {
                     currentPage = {};
                 }
 
@@ -177,7 +172,7 @@ module.exports = {
             return cb(currentPage);
         }
     },
-    setProperty: function (obj, path, value) {
+    setProperty: function(obj, path, value) {
         var tObj = obj;
         var paths = path.split('.');
         for (i = 0; i < paths.length - 1; i++) {
@@ -188,7 +183,7 @@ module.exports = {
         }
         tObj[paths[paths.length - 1]] = value;
     },
-    getProperty: function (obj, path, cb) {
+    getProperty: function(obj, path, cb) {
         var tObj = obj;
         var paths = path.split('.');
         for (i = 0; i < paths.length - 1; i++) {
@@ -206,20 +201,17 @@ module.exports = {
 
         return tObj[paths[paths.length - 1]];
     },
-    endsWith: function (str, suffix) {
+    endsWith: function(str, suffix) {
         return str.indexOf(suffix, str.length - suffix.length) !== -1;
     },
-    getValidationErrorMessage: function(input)
-    {
+    getValidationErrorMessage: function(input) {
 
     },
     /*
-    Gets a string or boolean value based on a given string
+     Gets a string or boolean value based on a given string
      */
-    getStringOrBoolean: function (str)
-    {
-        switch (str.toLowerCase())
-        {
+    getStringOrBoolean: function(str) {
+        switch (str.toLowerCase()) {
             case "true":
                 return true;
                 break;
@@ -232,27 +224,25 @@ module.exports = {
         }
     },
     /*
-    Gets the current application directory, if filename is specified, returns the full file path.
+     Gets the current application directory, if filename is specified, returns the full file path.
      */
-    getAppPath: function(fp){
+    getAppPath: function(fp) {
         var ret = config.appDir;
-        if (fp)
-        {
+        if (fp) {
             ret = path.join(ret, fp);
         }
         return ret;
     },
 
     /*
-    Handles incoming mail from SendGrid inbound parse service and sends relevants data to database.
+     Handles incoming mail from SendGrid inbound parse service and sends relevants data to database.
      */
-    handleIncomingSendGridMail: function(key, req)
-    {
+    handleIncomingSendGridMail: function(key, req) {
         var models = require(luzUtil.getAppPath('/models'));
         var newMail = new models.system.Mail();
 
         var to = req.body.to.split(',');
-        to = _.map(to, function(t){
+        to = _.map(to, function(t) {
             return t.trim();
         });
 
@@ -260,20 +250,17 @@ module.exports = {
         var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
 
         blobService.createContainerIfNotExists('mailattachments', function(error, result, response) {
-            _.forEach(req.files, function(f)
-            {
-                attachments.push(
-                    {
-                        key: f.name,
-                        filename: f.originalname,
-                        mimeType: f.mimetype,
-                        size: f.size
-                    });
-                fs.readFile(f.path, function(err, data){
-                    if (!err){
+            _.forEach(req.files, function(f) {
+                attachments.push({
+                    key: f.name,
+                    filename: f.originalname,
+                    mimeType: f.mimetype,
+                    size: f.size
+                });
+                fs.readFile(f.path, function(err, data) {
+                    if (!err) {
                         blobService.createBlockBlobFromText('mailattachments', f.name, data, function(e, resu, resp) {
-                            if (!e)
-                            {
+                            if (!e) {
                                 fs.unlink(f.path);
                             }
                         });
@@ -289,15 +276,12 @@ module.exports = {
             newMail.subject = req.body.subject;
             newMail.date = new Date();
 
-            if (req.body.attachments > 0)
-            {
+            if (req.body.attachments > 0) {
                 newMail.attachments = attachments;
             }
 
-            newMail.save(function(err, s)
-            {
-                if (err)
-                {
+            newMail.save(function(err, s) {
+                if (err) {
                     return err;
                 }
                 luzUtil.processEmail(newMail);
@@ -309,15 +293,22 @@ module.exports = {
      * Processes an incoming email amongs it's mailboxes.
      * @param mail The email received on the incoming action.
      */
-    processEmail: function(mail)
-    {
+    processEmail: function(mail) {
         var dbMailbox = models.system.Mailbox;
-        _.each(mail.to, function (t){
+        _.each(mail.to, function(t) {
             t = t.replace('<', '').replace('<', '').trim().toLowerCase();
-            dbMailbox.find({addresses: {$in: [t]}},function(err, mailboxes){
-                if (!err){
-                    _.forEach(mailboxes, function (mailbox){
-                        mailbox.mails.push({
+            dbMailbox.find({
+                addresses: {
+                    $in: [t]
+                }
+            }, function(err, mailboxes) {
+                if (!err) {
+                    _.forEach(mailboxes, function(mailbox) {
+                        /* var i = _.findIndex(mailbox.folders, function(f){
+                         f.title == commonStrings.mail.folders.inbox;
+                         });*/
+                        var i = 0;
+                        mailbox.folders[i].mails.push({
                             mail: mail
                         });
                         mailbox.save();
@@ -327,23 +318,17 @@ module.exports = {
         });
 
     },
-    importEmailsFromAzure: function()
-    {
+    importEmailsFromAzure: function() {
         var ret = [];
-        try
-        {
+        try {
             var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
-            blobService.listBlobsSegmented("mails", null, function(err, result){
-                if (!err)
-                {
-                    _.each(result.entries, function(e)
-                    {
-                        blobService.getBlobToText("mails", e.name, function(err, result){
-                            if (!err)
-                            {
+            blobService.listBlobsSegmented("mails", null, function(err, result) {
+                if (!err) {
+                    _.each(result.entries, function(e) {
+                        blobService.getBlobToText("mails", e.name, function(err, result) {
+                            if (!err) {
                                 var mail = JSON.parse(result);
-                                if (mail.to)
-                                {
+                                if (mail.to) {
                                     ret.push(luzUtil.handleIncomingSendGridMail(e.name, mail));
                                 }
                             }
@@ -351,9 +336,7 @@ module.exports = {
                     });
                 }
             });
-        }
-        catch (ex)
-        {
+        } catch (ex) {
 
         }
 

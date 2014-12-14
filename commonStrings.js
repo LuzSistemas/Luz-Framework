@@ -28,7 +28,6 @@ module.exports = {
     of: 'De',
     createMailAccount: 'Criar conta de e-mail',
     mail:{
-        inbox: 'Caixa de entrada',
         compose: 'Escrever e-mail',
         view: 'Ver E-mails',
         moveToFolder: 'Mover para pasta',
@@ -37,6 +36,7 @@ module.exports = {
         tag: 'Etiqueta',
             folders:
             {
+                inbox: 'Caixa de entrada',
                 starred: 'Com estrela',
                 sent: 'Enviados',
                 drafts: 'Rascunho',

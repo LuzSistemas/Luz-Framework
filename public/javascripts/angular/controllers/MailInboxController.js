@@ -3,12 +3,13 @@
  */
 window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($scope, $http) {
     var inbox = {
-        title: commonStrings.mail.inbox,
+        title: commonStrings.mail.folders.inbox,
         icon: 'inbox',
         unreadCount: 2
     };
 
     $scope.mailbox = window.mailbox;
+    $scope.mailbox.currentFolder = $scope.mailbox.folders[0];
     $scope.mailbox.page =
     {
         current: 1,
@@ -18,18 +19,18 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
         },
         max: function () {
             var max = $scope.mailbox.pageSize * $scope.mailbox.page.current;
-            if (max > $scope.mailbox.mails.length){
-                max = $scope.mailbox.mails.length;
+            if (max > $scope.mailbox.currentFolder.mails.length){
+                max = $scope.mailbox.currentFolder.mails.length;
             }
             return max;
         },
         mails: function () {
-            return $scope.mailbox.mails.slice($scope.mailbox.page.min(), $scope.mailbox.page.max());
+            return $scope.mailbox.currentFolder.mails.slice($scope.mailbox.page.min(), $scope.mailbox.page.max());
         },
         total: function () {
-            return $scope.mailbox.mails().length();
+            return $scope.mailbox.currentFolder.mails.length;
         }
-    }
+    };
 
 
     /*$scope.mailbox =
@@ -127,6 +128,25 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
 
     $scope.star = function (mail)
     {
-        debugger;
+        var indexMail = _.findIndex($scope.mailbox.folders[1].mails, function(m){
+            return m.mail._id == mail.mail._id;
+        });
+        if (indexMail >= 0)
+        {
+            $scope.mailbox.folders[1].mails.splice(indexMail, 1);
+        }
+        else{
+            $scope.mailbox.folders[1].mails.push(mail);
+        }
+
+    };
+
+    $scope.hasStar = function (mail)
+    {
+        var indexMail = _.findIndex($scope.mailbox.folders[1].mails, function(m){
+            return m.mail._id == mail.mail._id;
+        });
+
+        return (indexMail >= 0)
     };
 }]);
