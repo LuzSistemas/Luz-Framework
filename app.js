@@ -12,19 +12,21 @@ var entidadesBig = require('./models');
 var passport = require('passport');
 var pwd = require('pwd');
 var commonStrings = require('./commonStrings');
-var luzUtil = require('./LuzUtil');
 var luzAuth = require('./LuzAuth');
 var userPermissions = require("./UserPermissions");
 var ls = require('list-directory-contents');
 var config = require("./config");
 var multer  = require('multer');
 var os = require('os')
+var luzUtil = require ('./LuzUtil');
+GLOBAL.luzUtil = luzUtil;
+GLOBAL.config = config;
+GLOBAL.commonStrings = commonStrings;
+GLOBAL._ = _;
 
 var serverStartupDate = new Date();
-
-var viewPath = path.join(__dirname, 'views')
-
-ls(viewPath, function (err, tree) {
+var viewsPath = luzUtil.getAppPath('views/');
+ls(viewsPath, function (err, tree) {
     var views = {};
     for (var i in tree)
     {
@@ -32,13 +34,11 @@ ls(viewPath, function (err, tree) {
         {
             if (os.platform() == 'win32')
             {
-                var fPath = tree[i].replace(viewPath + "\\", '').replace(/\\/g,'.').split('.');
-                fPath.pop();
-                luzUtil.setProperty(views, fPath.join("."), true);
+                luzUtil.setProperty(views, tree[i].replace(viewsPath, '').split('.')[0].replace(/\\/g,'.'), true);
             }
-            else {
-                //TODO
-                luzUtil.setProperty(views, tree[i].replace(viewPath, '').split('.')[0].replace(new RegExp("/","g"), '.'), true);
+            else
+            {
+                luzUtil.setProperty(views, tree[i].replace(viewsPath, '').split('.')[0].replace(new RegExp("/","g"), '.'), true);
             }
         }
     }
@@ -58,7 +58,7 @@ var app = express();
 /**
  * Internal Express middleware setup
  */
-app.set('views', viewPath);
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(favicon("./public/brackets/images/favicon.png"));
 app.use(logger('dev'));
@@ -98,27 +98,29 @@ app.use(function (req, res, next) {
              * If both apply, replace default layout with the one from the active template.
              */
 
+            var targetTemplate = config.adminTemplate;
+
             if (!options)
             {
                 options = {};
             }
 
-            if (global.views.templates[config.activeTemplate].layout && !options.layout)
+            if (global.views.templates[targetTemplate].layout && !options.layout)
             {
                 _.merge(options,
                     {
-                        layout: "templates/" + config.activeTemplate + "/layout"
+                        layout: "templates/" + targetTemplate + "/layout"
                     });
             }
             /**
              * Checks if this view exists within the active template.
              */
-            if (luzUtil.getProperty(global.views.templates[config.activeTemplate], view.replace(/\\/g, '.')))
+            if (luzUtil.getProperty(global.views.templates[targetTemplate], view.replace(/\\/g, '.')))
             {
                 /**
                  * If it does, replaces the default view with the template one.
                  */
-                view = "templates/" + config.activeTemplate + "/" + view;
+                view = "templates/" + targetTemplate + "/" + view;
             }
             _.merge(options,
                 {
@@ -142,11 +144,11 @@ setupPages(pages, "/", function (router, extractedPermissions) {
     app.use(router);
     _.forEach(extractedPermissions, function(newPermission) {
         /**
-         * Ignore permissions with the same key.
+         * Ignoring permissions with the same key.
          */
         if (_.isUndefined(userPermissions[newPermission.key]))
         {
-            userPermissions[key] = newPermission;
+            userPermissions[newPermission.key] = newPermission;
         }
     });
 });
@@ -155,9 +157,10 @@ buildMenuItems(menuItems, pages, "/");
 /**
  * Builds all the menu items based on the pages folder.
  * @param items The parent menu item reference.
- * @param pages The pages to be processed into menu items.
+ * @param pgs The pages to be processed into menu items.
  */
-function buildMenuItems(items, pages, parentUrl) {
+function buildMenuItems(items, pgs, parentUrl) {
+    var pages = pgs.admin;
     for (var p in pages) {
         /**
          * Checks if page has a menu item definition.
@@ -205,12 +208,16 @@ function setupPages(pages, parentUrl, cb, router) {
                 var userAuthenticationStrategy = pages[r].controller[m].auth ? pages[r].controller[m].auth : luzUtil.checkAuth;
 
                 //Checks if there any necessary permissions for accessing this action
-                if (pages[r].controller[m].action.necessaryPermissions)
+                if (pages[r].controller[m].necessaryPermissions)
                 {
                     //Append new user permissions
-                    userPermissions = userPermissions.concat(pages[r].controller[m].action.necessaryPermissions);
+                    userPermissions = userPermissions.concat(pages[r].controller[m].necessaryPermissions);
                 }
                 router[m](tUrl, userAuthenticationStrategy, pages[r].controller[m].action)
+                if (tUrl.lastIndexOf('/') == (tUrl.length - 1) && pages[r].page)
+                {
+                    router[m](tUrl + 'index', userAuthenticationStrategy, pages[r].controller[m].action)
+                }
             }
         }
         else {
@@ -252,7 +259,6 @@ app.use('/api/commonStrings', function (req, res) {
  */
 app.use('/api/routes', function (req, res) {
     //TODO: Filter menu items per user permissions and roles!!
-
     res.send(pages);
 });
 

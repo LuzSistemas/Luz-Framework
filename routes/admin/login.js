@@ -1,9 +1,8 @@
 /**
  * Created by Pedro Luz on 23/08/2014.
  */
-var commonStrings = require('../commonStrings');
+var commonStrings = require(luzUtil.getAppPath('commonStrings'));
 var _ = require('lodash-node');
-var luzUtil = require("../LuzUtil");
 var passport = require('passport');
 
 /* GET users listing. */
@@ -17,6 +16,10 @@ var loginController = {
     post: {
         action: function (req, res, next) {
             passport.authenticate('local', function (err, user) {
+                if (user == false)
+                {
+                    err = commonStrings.userNotFound;
+                }
                 if (err) {
                     return res.render('login', {currentPage: {error: err}, layout: 'standalone'});
                 }
@@ -24,7 +27,7 @@ var loginController = {
                     if (err) {
                         return next(err);
                     }
-                    return res.redirect('/pessoa/nova');
+                    return res.redirect('/admin/pessoa/nova');
                 });
             })(req, res, next);
         },

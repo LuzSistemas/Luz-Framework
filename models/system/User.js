@@ -1,7 +1,6 @@
 /**
  * Created by Pedro Luz on 23/08/2014.
  */
-var luzUtil = require('../../LuzUtil');
 var pessoa = require("../Pessoa");
 var mongoose = require('mongoose');
 var userGroup = require ('./UserGroup');
@@ -17,6 +16,7 @@ var userSchema = {
     superAdmin: {type: Boolean, default: false},
     individualPermissions: [String],
     deniedPermissions: [String],
+    userOptions: mongoose.Schema.Types.Mixed,
     groups: [{ type: mongoose.Schema.Types.ObjectId, ref: userGroup.key }]
 };
 

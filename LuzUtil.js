@@ -2,7 +2,12 @@
  * Created by Pedro Luz on 22/08/2014.
  */
 var strings = require("./commonStrings");
+var config = require("./config");
+var path = require("path");
 var _ = require('lodash-node');
+var azure = require('azure-storage');
+var fs = require('fs');
+
 module.exports = {
     /**
      * Validates a user given a password.
@@ -48,7 +53,7 @@ module.exports = {
                          * Missing permission for this page!
                          */
                         //TODO: Missing permissions page!
-                        res.redirect('/login')
+                        res.redirect('/admin/login')
                     }
                 }
             }
@@ -59,7 +64,7 @@ module.exports = {
         }
 
         //You shall not pass!
-        res.redirect('/login')
+        res.redirect('/admin/login')
     },
 
     /**
@@ -141,7 +146,7 @@ module.exports = {
                     currentPage[tUrl] = {};
                 }
 
-                currentPage = counter == urlPath.length ? currentPage[tUrl].page : currentPage[tUrl];
+                currentPage = counter == urlPath.length ? (currentPage[tUrl].index ? currentPage[tUrl].index.page : currentPage[tUrl].page) : currentPage[tUrl];
 
                 if (!currentPage)
                 {
@@ -225,5 +230,133 @@ module.exports = {
                 return str;
                 break;
         }
+    },
+    /*
+    Gets the current application directory, if filename is specified, returns the full file path.
+     */
+    getAppPath: function(fp){
+        var ret = config.appDir;
+        if (fp)
+        {
+            ret = path.join(ret, fp);
+        }
+        return ret;
+    },
+
+    /*
+    Handles incoming mail from SendGrid inbound parse service and sends relevants data to database.
+     */
+    handleIncomingSendGridMail: function(key, req)
+    {
+        var models = require(luzUtil.getAppPath('/models'));
+        var newMail = new models.system.Mail();
+
+        var to = req.body.to.split(',');
+        to = _.map(to, function(t){
+            return t.trim();
+        });
+
+        var attachments = [];
+        var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
+
+        blobService.createContainerIfNotExists('mailattachments', function(error, result, response) {
+            _.forEach(req.files, function(f)
+            {
+                attachments.push(
+                    {
+                        key: f.name,
+                        filename: f.originalname,
+                        mimeType: f.mimetype,
+                        size: f.size
+                    });
+                fs.readFile(f.path, function(err, data){
+                    if (!err){
+                        blobService.createBlockBlobFromText('mailattachments', f.name, data, function(e, resu, resp) {
+                            if (!e)
+                            {
+                                fs.unlink(f.path);
+                            }
+                        });
+                    }
+                });
+
+            });
+
+            newMail.key = key;
+            newMail.to = to;
+            newMail.from = req.body.from;
+            newMail.spam_score = req.body.spam_score;
+            newMail.subject = req.body.subject;
+            newMail.date = new Date();
+
+            if (req.body.attachments > 0)
+            {
+                newMail.attachments = attachments;
+            }
+
+            newMail.save(function(err, s)
+            {
+                if (err)
+                {
+                    return err;
+                }
+                luzUtil.processEmail(newMail);
+                return true;
+            });
+        });
+    },
+    /**
+     * Processes an incoming email amongs it's mailboxes.
+     * @param mail The email received on the incoming action.
+     */
+    processEmail: function(mail)
+    {
+        var dbMailbox = models.system.Mailbox;
+        _.each(mail.to, function (t){
+            t = t.replace('<', '').replace('<', '').trim().toLowerCase();
+            dbMailbox.find({addresses: {$in: [t]}},function(err, mailboxes){
+                if (!err){
+                    _.forEach(mailboxes, function (mailbox){
+                        mailbox.mails.push({
+                            mail: mail
+                        });
+                        mailbox.save();
+                    });
+                }
+            });
+        });
+
+    },
+    importEmailsFromAzure: function()
+    {
+        var ret = [];
+        try
+        {
+            var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
+            blobService.listBlobsSegmented("mails", null, function(err, result){
+                if (!err)
+                {
+                    _.each(result.entries, function(e)
+                    {
+                        blobService.getBlobToText("mails", e.name, function(err, result){
+                            if (!err)
+                            {
+                                var mail = JSON.parse(result);
+                                if (mail.to)
+                                {
+                                    ret.push(luzUtil.handleIncomingSendGridMail(e.name, mail));
+                                }
+                            }
+                        })
+                    });
+                }
+            });
+        }
+        catch (ex)
+        {
+
+        }
+
+        return ret;
     }
 };

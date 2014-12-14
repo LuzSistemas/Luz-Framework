@@ -1,5 +1,7 @@
-var userPermissions = require("../../UserPermissions");
-var strings = require("../../commonStrings");
+var userPermissions = require("../../../UserPermissions");
+var strings = require("../../../commonStrings");
+var models = require('../../../models');
+
 var novaPessoaController = {
     get: {
         necessaryPermissions: [{
@@ -8,14 +10,13 @@ var novaPessoaController = {
             description: "Permissão para criar novos usuários no sistema."
         }],
         action: function(req, res) {
-            var models = require('../../models');
             models.system.User.find({}, function(err, pessoas) {
                 res.render('index', {
                     teste: pessoas
                 });
             });
         }
-}
+    }
 };
 
 module.exports = {

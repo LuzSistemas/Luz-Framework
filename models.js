@@ -4,7 +4,7 @@
 
 if (global.models)
 {
-    module.exports = global.models;
+    module.exports = GLOBAL.models;
     return;
 }
 var entities = {};
@@ -16,7 +16,6 @@ var models = require('require-dir')('./models', {
 });
 
 setupModels(models,[]);
-global.models = models;
 
 /**
  * Helper function for models setup
@@ -40,5 +39,10 @@ function setupModels(model, parentModels) {
     }
 }
 
-mongoose.connect(config.connectionString);
+if (config.dbEnabled == true)
+{
+    mongoose.connect(config.connectionString);
+}
+
+GLOBAL.models = entities;
 module.exports = entities;

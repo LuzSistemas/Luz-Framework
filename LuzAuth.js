@@ -3,7 +3,6 @@
  */
 var entidadesBig = require('./models');
 var commonStrings = require('./commonStrings');
-var luzUtil = require('./LuzUtil');
 var LocalStrategy = require('passport-local').Strategy;
 
 module.exports =

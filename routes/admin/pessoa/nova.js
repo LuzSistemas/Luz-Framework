@@ -1,5 +1,5 @@
-var userPermissions = require("../../UserPermissions");
-var strings = require("../../commonStrings");
+var userPermissions = require("../../../UserPermissions");
+var strings = require("../../../commonStrings");
 var novaPessoaController = {
     get: {
         necessaryPermissions: [{
@@ -8,12 +8,11 @@ var novaPessoaController = {
             description: "Permission for viewing the dashboard page."
         }],
         action: function(req, res) {
-            res.render('pessoa/nova');
-            return;
-            var models = require('../../models');
+            var models = require(luzUtil.getAppPath('/models'));
             models.system.User.find({}, function(err, pessoas) {
-                res.render('index', {
-                    teste: pessoas
+                res.render('pessoa/nova', {
+                    teste: pessoas,
+                    req: req
                 });
             });
         }

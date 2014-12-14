@@ -1,9 +1,8 @@
 /* GET home page. */
-var entidadesBig = require('../models');
+var entidadesBig = require('../../models');
 var util = require('util');
 var fs = require('fs');
 var uuid = require('node-uuid');
-var luzUtil = require("../LuzUtil");
 
 
 var indexController = {

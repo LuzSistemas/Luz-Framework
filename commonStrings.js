@@ -18,5 +18,29 @@ module.exports = {
     exit: 'Sair',
     profile: 'Perfil',
     account: 'Conta',
-    accountSettings: 'Configurações da conta'
+    accountSettings: 'Configurações da conta',
+    folders: 'Pastas',
+    folder: 'Pasta',
+    archive: 'Arquivar',
+    delete: 'Excluir',
+    showing: 'Mostrando',
+    messages: 'Mensagens',
+    of: 'De',
+    createMailAccount: 'Criar conta de e-mail',
+    mail:{
+        inbox: 'Caixa de entrada',
+        compose: 'Escrever e-mail',
+        view: 'Ver E-mails',
+        moveToFolder: 'Mover para pasta',
+        reportSpam: 'Reportar Spam',
+        mailboxAlreadyExists: 'Caixa de entrada já existe',
+        tag: 'Etiqueta',
+            folders:
+            {
+                starred: 'Com estrela',
+                sent: 'Enviados',
+                drafts: 'Rascunho',
+                trash: 'Lixeira'
+            }
+    }
 }
