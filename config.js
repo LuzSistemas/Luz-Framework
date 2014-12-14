@@ -10,6 +10,10 @@ module.exports = {
     mail:
     {
         azureStorageAccount: 'incastorage',
-        azureStorageKey: 'uaeIeLOhb48d46xgb7wdGzXtSm3VAuudCGoTGgbZBrYq/Vy2TkAiHVreyALSYNoQKM+yDgkWfuxRUTmoLiVf8g=='
+        azureStorageKey: 'uaeIeLOhb48d46xgb7wdGzXtSm3VAuudCGoTGgbZBrYq/Vy2TkAiHVreyALSYNoQKM+yDgkWfuxRUTmoLiVf8g==',
+        defaults:
+        {
+            pageSize: 50
+        }
     }
 };

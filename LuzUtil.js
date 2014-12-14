@@ -300,8 +300,61 @@ module.exports = {
                 {
                     return err;
                 }
+                luzUtil.processEmail(newMail);
                 return true;
             });
         });
+    },
+    /**
+     * Processes an incoming email amongs it's mailboxes.
+     * @param mail The email received on the incoming action.
+     */
+    processEmail: function(mail)
+    {
+        var dbMailbox = models.system.Mailbox;
+        _.each(mail.to, function (t){
+            t = t.replace('<', '').replace('<', '').trim().toLowerCase();
+            dbMailbox.findOne({to: {$in: [t]}},function(err, mailbox){
+                if (!err && mailbox){
+                    mailbox.mails.push({
+                        id: mail._id
+                    });
+                    mailbox.save();
+                }
+            });
+        });
+
+    },
+    importEmailsFromAzure: function()
+    {
+        var ret = [];
+        try
+        {
+            var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
+            blobService.listBlobsSegmented("mails", null, function(err, result){
+                if (!err)
+                {
+                    _.each(result.entries, function(e)
+                    {
+                        blobService.getBlobToText("mails", e.name, function(err, result){
+                            if (!err)
+                            {
+                                var mail = JSON.parse(result);
+                                if (mail.to)
+                                {
+                                    ret.push(luzUtil.handleIncomingSendGridMail(e.name, mail));
+                                }
+                            }
+                        })
+                    });
+                }
+            });
+        }
+        catch (ex)
+        {
+
+        }
+
+        return ret;
     }
 };

@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var user = require ('./User');
 var _ = require('lodash-node')
 
-var modelKey = 'UserGroup;'
+var modelKey = 'UserGroup';
 
 /**
  * User schema definition based on Mongoose standards.

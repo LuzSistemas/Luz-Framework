@@ -26,12 +26,14 @@ module.exports = {
     showing: 'Mostrando',
     messages: 'Mensagens',
     of: 'De',
+    createMailAccount: 'Criar conta de e-mail',
     mail:{
         inbox: 'Caixa de entrada',
         compose: 'Escrever e-mail',
         view: 'Ver E-mails',
         moveToFolder: 'Mover para pasta',
         reportSpam: 'Reportar Spam',
+        mailboxAlreadyExists: 'Caixa de entrada já existe',
         tag: 'Etiqueta',
             folders:
             {

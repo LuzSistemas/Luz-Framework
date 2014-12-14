@@ -16,6 +16,7 @@ var userSchema = {
     superAdmin: {type: Boolean, default: false},
     individualPermissions: [String],
     deniedPermissions: [String],
+    userOptions: mongoose.Schema.Types.Mixed,
     groups: [{ type: mongoose.Schema.Types.ObjectId, ref: userGroup.key }]
 };
 

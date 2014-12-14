@@ -22,6 +22,7 @@ var luzUtil = require ('./LuzUtil');
 GLOBAL.luzUtil = luzUtil;
 GLOBAL.config = config;
 GLOBAL.commonStrings = commonStrings;
+GLOBAL._ = _;
 
 var serverStartupDate = new Date();
 var viewsPath = luzUtil.getAppPath('views/');

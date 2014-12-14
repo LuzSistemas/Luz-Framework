@@ -1,3 +1,6 @@
+<script type="text/javascript">
+    window.mailbox = JSON.parse('<%= JSON.stringify(mailbox)%>');
+</script>
 <script type="text/javascript" src="/javascripts/angular/controllers/MailInboxController.js"></script>
 <div class="row" data-ng-controller="MailInboxController">
     <div class="col-sm-3 col-lg-2">
@@ -103,7 +106,7 @@
                                             <!--<img alt="" src="{{m.}}" class="media-object">-->
                                         <!--</a>-->
                                         <div class="media-body">
-                                            <span class="media-meta pull-right">{{m.date | date:'short'}}</span>
+                                            <span class="media-meta pull-right">{{m.date | date :'short'}}</span>
                                             <h4 class="text-primary">{{m.from.replace('<','').replace('>','')}}</h4>
                                             <small class="text-muted"></small>
                                             <p class="email-summary">{{m.subject}}</p>
