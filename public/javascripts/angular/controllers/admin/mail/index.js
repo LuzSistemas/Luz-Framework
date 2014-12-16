@@ -19,7 +19,7 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
         },
         max: function () {
             var max = $scope.mailbox.pageSize * $scope.mailbox.page.current;
-            if (max > $scope.mailbox.currentFolder.mails.length){
+            if (max > $scope.mailbox.currentFolder.mails.length) {
                 max = $scope.mailbox.currentFolder.mails.length;
             }
             return max;
@@ -31,7 +31,6 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
             return $scope.mailbox.currentFolder.mails.length;
         }
     };
-
 
     /*$scope.mailbox =
     {
@@ -86,6 +85,12 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
         ]
     };*/
 
+    $scope.openMail = function (mail)
+    {
+        debugger;
+        window.location.href = '/admin/mail/read?id=' + mail.mail._id;
+    };
+
     $scope.moveToFolder = function (folder)
     {
         debugger;
@@ -135,7 +140,8 @@ window.BigJS.controller('MailInboxController', ['$scope', '$http', function ($sc
         {
             $scope.mailbox.folders[1].mails.splice(indexMail, 1);
         }
-        else{
+        else
+        {
             $scope.mailbox.folders[1].mails.push(mail);
         }
 

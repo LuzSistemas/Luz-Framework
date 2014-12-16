@@ -28,6 +28,7 @@ module.exports = {
     of: 'De',
     createMailAccount: 'Criar conta de e-mail',
     mail:{
+        read: 'Ler e-mail',
         compose: 'Escrever e-mail',
         view: 'Ver E-mails',
         moveToFolder: 'Mover para pasta',

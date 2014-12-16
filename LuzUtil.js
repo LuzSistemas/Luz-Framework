@@ -341,5 +341,9 @@ module.exports = {
         }
 
         return ret;
+    },
+    getBlobService: function(){
+        var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
+        return blobService;
     }
 };
