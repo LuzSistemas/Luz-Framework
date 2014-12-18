@@ -14,18 +14,17 @@ var mailIndexController = {
             description: "Permissão para visualizar e-mails no sistema."
         }],
         action: function(req, res) {
-            debugger;
-            models.system.Mailbox.findOne({userId: req.user._id}).populate('mails.mail').exec(function(err, mailbox)
+            models.system.Mailbox.findOne({user: req.user._id}).populate('folders.mails.mail').exec(function(err, mailbox)
             {
+                debugger;
                 if (!err)
                 {
-                   /* models.system.Mail.find({}, function(err, mails){
+                   /*models.system.Mail.find({}, function(err, mails){
                         _.forEach(mails, function (m){
                             luzUtil.processEmail(m);
                         });
                     });*/
 
-                    debugger;
                     res.render('\\mail\\index', {
                         mailbox: mailbox
                     });
@@ -41,13 +40,13 @@ var mailIndexController = {
 module.exports = {
     controller: mailIndexController,
     menuItem: {
-        title: commonStrings.mail.inbox,
+        title: commonStrings.mail.folders.inbox,
         icon: "fa-envelope"
     },
     page: {
         title: commonStrings.mailBox,
         header: {
-            title: commonStrings.mail.inbox,
+            title: commonStrings.mail.folders.inbox,
             description: 'Bem-vindo aos seus e-mails.',
             icon: 'fa-envelope'
         }

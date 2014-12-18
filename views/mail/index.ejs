@@ -1,36 +1,9 @@
 <script type="text/javascript">
     window.mailbox = JSON.parse('<%- JSON.stringify(mailbox)%>');
 </script>
-<script type="text/javascript" src="/javascripts/angular/controllers/MailInboxController.js"></script>
+<script type="text/javascript" src="/javascripts/angular/controllers/admin/mail/index.js"></script>
 <div class="row" data-ng-controller="MailInboxController">
-    <div class="col-sm-3 col-lg-2">
-        <a data-ng-click="composeMail();" class="btn btn-primary btn-block btn-compose-email">{{commonStrings.mail.compose}}</a>
-
-        <ul class="nav nav-pills nav-stacked nav-email">
-            <li data-ng-repeat="sf in mailbox.systemFolders" data-ng-class="{active: mailbox.currentFolder == sf}">
-                <a data-ng-click="openFolder(sf);">
-                    <span ng-if="sf.unreadCount > 0" class="badge pull-right">{{sf.unreadCount}}</span>
-                    <i class="glyphicon glyphicon-{{sf.icon}}"></i> {{sf.title}}
-                </a>
-            </li>
-        </ul>
-
-        <div class="mb30"></div>
-        <div data-ng-if="mailbox.folders && mailbox.folders.length > 0">
-            <h5 class="subtitle">{{commonStrings.folders}}</h5>
-            <ul class="nav nav-pills nav-stacked nav-email mb20">
-                <li data-ng-repeat="f in mailbox.folders" data-ng-class="{active: mailbox.currentFolder == f}">
-                    <a data-ng-click="openFolder(f);">
-                        <span ng-if="f.unreadCount > 0" class="badge pull-right">{{f.unreadCount}}</span>
-                        <i class="glyphicon glyphicon-{{f.icon}}"></i> {{f.title}}
-                    </a>
-                </li>
-            </ul>
-        </div>
-
-    </div>
-    <!-- col-sm-3 -->
-
+    <%- include leftMenu.ejs %>
     <div class="col-sm-9 col-lg-10">
 
         <div class="panel panel-default">
@@ -84,13 +57,13 @@
                 </div>
                 <!-- pull-right -->
 
-                <h5 class="subtitle mb5">{{commonStrings.mail.inbox}}</h5>
+                <h5 class="subtitle mb5">{{commonStrings.mail.folders.inbox}}</h5>
                 <p class="text-muted">{{commonStrings.showing}} {{mailbox.page.min()}} - {{mailbox.page.max()}} {{commonStrings.of.toLowerCase()}} {{mailbox.page.total()}} {{commonStrings.messages.toLowerCase()}}</p>
 
                 <div class="table-responsive">
                     <table class="table table-email">
                         <tbody>
-                            <tr data-ng-repeat="m in mailbox.page.mails()" data-ng-class="{unread: m.readOn != null}">
+                            <tr data-ng-repeat="m in mailbox.page.mails()" data-ng-click="openMail(m);" data-ng-class="{unread: m.readOn != null}">
                                 <td>
                                     <div class="ckbox ckbox-success">
                                         <input type="checkbox" id="{{m.mail.key.replace('.json','')}}">
@@ -98,7 +71,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <a data-ng-click="star(m);" class="star"><i class="glyphicon glyphicon-star"></i></a>
+                                    <a data-ng-click="star(m);" ng-class="{star: !hasStar(m), starChecked: hasStar(m)}"><i class="glyphicon glyphicon-star"></i></a>
                                 </td>
                                 <td>
                                     <div class="media">

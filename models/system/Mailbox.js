@@ -3,6 +3,23 @@
  */
 var mongoose = require('mongoose');
 
+
+var folderSchema = {
+    title: {
+        type: String,
+        required: true
+    },
+    mails: [{
+        _id: false,
+        mail: {type: mongoose.Schema.Types.ObjectId, ref: 'Mail'},
+        readOn: Date,
+        tags: [String]
+    }],
+    createdOn: {
+        type: Date
+    }
+};
+
 var mailboxSchema = {
     userId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -18,19 +35,7 @@ var mailboxSchema = {
             createdOn: Date
         }
     }],
-    mails: [{
-        _id: false,
-        mail: {type: mongoose.Schema.Types.ObjectId, ref: 'Mail'},
-        readOn: Date,
-        tags: [String]
-    }],
-    folders: [{
-        title: {
-            type: String
-        },
-        mails: [mongoose.Schema.Types.ObjectId],
-        createdOn: Date
-    }]
+    folders: [folderSchema]
 };
 
 module.exports = {

@@ -12,23 +12,43 @@ var createMailboxController = {
         necessaryPermissions: [createMailboxPermission],
         action: function(req, res) {
             models.system.Mailbox.findOne({userId: req.body.userId}, function(err, mailbox) {
+
+                if (err)
+                {
+                    res.send(err);
+                    return;
+                }
+
                 if (mailbox)
                 {
                     res.send(commonStrings.mail.mailboxAlreadyExists);
                     return;
                 }
-                mailbox = new models.system.Mailbox();
-                mailbox.userId = req.body.userId;
-                mailbox.addresses = req.body.addresses;
-                mailbox.pageSize = config.mail.defaults.pageSize;
-                mailbox.save(function(err){
-                    if (!err)
-                    {
-                        res.send('OK');
-                        return;
+
+                var now = new Date();
+
+                models.system.User.findById(req.body.userId, function(uErr, user){
+                    if (!uErr && user){
+                        mailbox = new models.system.Mailbox();
+                        mailbox.user = user;
+                        mailbox.addresses = req.body.addresses;
+                        mailbox.pageSize = config.mail.defaults.pageSize;
+                        _.forEach(config.mail.defaults.folders, function(f){
+                            mailbox.folders.push({
+                                title: f,
+                                createdOn: now
+                            });
+                        });
+                        mailbox.save(function(err){
+                            if (!err)
+                            {
+                                res.send('OK');
+                                return;
+                            }
+                            res.send(uErr);
+                            return;
+                        });
                     }
-                    res.send(err);
-                    return;
                 });
             });
         }

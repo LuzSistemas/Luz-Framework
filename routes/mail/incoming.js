@@ -1,9 +1,7 @@
 /**
  * Created by Pedro on 27/11/2014.
  */
-var azure = require('azure-storage');
 var strings = require("../../commonStrings");
-var luzUtil = require("../../LuzUtil");
 var config = require("../../config");
 var guid = require("easy-guid");
 var mailIncomingController = {
@@ -14,7 +12,7 @@ var mailIncomingController = {
         {
             try
             {
-                var blobService = azure.createBlobService(config.mail.azureStorageAccount, config.mail.azureStorageKey);
+                var blobService = luzUtil.getBlobService();
                 blobService.createContainerIfNotExists('mails', function(error, result, response) {
                     var key =  guid.new(16) + ".json";
                     blobService.createBlockBlobFromText('mails', key, JSON.stringify(req.body), function(e, resu, resp) {
